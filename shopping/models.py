@@ -61,4 +61,4 @@ class StoreInformation(models.Model):
     description2      = models.CharField(max_length = 2000)
 
     class Meta:
-        db_table = 'store_informations'
+        db_table = 'store_information'
