@@ -42,7 +42,7 @@ class TestDriveSchedule(models.Model):
     contact_us          = models.TextField
 
     class Meta:
-        db_table = 'testdriveschedules'
+        db_table = 'test_drive_schedules'
 
 class ExpectDate(models.Model):
     period  = models.CharField(max_length = 100)
