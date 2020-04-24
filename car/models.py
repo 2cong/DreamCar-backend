@@ -25,7 +25,7 @@ class ModelVersionLine(models.Model):
     model         = models.ForeignKey('Model', on_delete = models.SET_NULL, null = True)
     version       = models.ForeignKey('Version', on_delete = models.SET_NULL, null = True)
     line          = models.ForeignKey('Line', on_delete = models.SET_NULL, null = True)
-    sepc          = models.ForeignKey('Spec', on_delete = models.SET_NULL, null = True)
+    spec          = models.ForeignKey('Spec', on_delete = models.SET_NULL, null = True)
     dimension     = models.ForeignKey('Dimension', on_delete = models.SET_NULL, null = True)
 
 
@@ -277,7 +277,6 @@ class Steering(models.Model):
 class SteeringType(models.Model):
     color           = models.ForeignKey('Color', on_delete=models.SET_NULL, null=True)
     thumnail_url    = models.URLField(max_length=2000)
-
 
 
 
