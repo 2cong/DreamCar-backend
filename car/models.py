@@ -6,20 +6,17 @@ class Model(models.Model):
     class Meta:
         db_table = 'models'
 
-
 class Version(models.Model):
     name         = models.CharField(max_length = 50)
 
     class Meta:
         db_table = 'versions'
 
-
 class Line(models.Model):
     name         = models.CharField(max_length = 50)
 
     class Meta:
         db_table = 'lines'
-
 
 class ModelVersionLine(models.Model):
     model         = models.ForeignKey('Model', on_delete = models.SET_NULL, null = True)
@@ -28,10 +25,8 @@ class ModelVersionLine(models.Model):
     spec          = models.ForeignKey('Spec', on_delete = models.SET_NULL, null = True)
     dimension     = models.ForeignKey('Dimension', on_delete = models.SET_NULL, null = True)
 
-
     class Meta:
         db_table  = 'model_version_lines'
-
 
 class Spec(models.Model):
     acceleration    = models.DecimalField(max_digits = 10, decimal_places = 2)
@@ -44,7 +39,6 @@ class Spec(models.Model):
 
     class Meta:
         db_table    = 'specs'
-
 
 class Dimension(models.Model):
     length              = models.IntegerField(default = 0)
@@ -67,28 +61,24 @@ class Dimension(models.Model):
     class Meta:
         db_table        = 'dimensions'
 
-
-
-class CustomCar(models.Model):
+class CustomCarOption(models.Model):
     model_version_line  = models.ForeignKey('ModelVersionLine', on_delete=models.SET_NULL, null=True)
     exterior_group      = models.ForeignKey('ExteriorGroup',on_delete=models.SET_NULL, null=True)
     interior_group      = models.ForeignKey('InteriorGroup', on_delete=models.SET_NULL, null=True)
-    customcar_accessory  = models.ManyToManyField('Accessory', through='CustomCarAccessory')
+    customcar_accessory = models.ManyToManyField('Accessory', through='CustomCarAccessory')
     package             = models.ManyToManyField('Package', through='ModelVersionLinePackage')
 
     class Meta:
-        db_table        = 'customcars'
+        db_table        = 'custom_car_options'
 
-
-class CustomCarProfile(models.Model):
-    custom_car   = models.OneToOneField('CustomCar',on_delete=models.SET_NULL, null=True)
-    name         = models.CharField(max_length=200)
-    email        = models.EmailField(max_length=200)
-    code         = models.CharField(max_length=400)
+class CustomCar(models.Model):
+    custom_car_option   = models.OneToOneField('CustomCarOption',on_delete=models.SET_NULL, null=True)
+    name                = models.CharField(max_length=200)
+    email               = models.EmailField(max_length=200)
+    code                = models.CharField(max_length=400)
 
     class Meta:
-        db_table = 'customcarprofiles'
-
+        db_table = 'custom_cars'
 
 class Color(models.Model):
     name         = models.CharField(max_length=100)
@@ -96,15 +86,13 @@ class Color(models.Model):
     class Meta:
         db_table = 'colors'
 
-
 class CustomCarAccessory(models.Model):
-    custom_car    = models.ForeignKey('CustomCar',on_delete=models.SET_NULL,null=True)
-    accessory     = models.ForeignKey('Accessory',on_delete=models.SET_NULL, null=True)
-    quantity      = models.IntegerField(default=0)
+    custom_car_option    = models.ForeignKey('CustomCarOption',on_delete=models.SET_NULL,null=True)
+    accessory            = models.ForeignKey('Accessory',on_delete=models.SET_NULL, null=True)
+    quantity             = models.IntegerField(default=0)
 
     class Meta:
-        db_table  = 'customcaraccessories'
-
+        db_table  = 'custom_car_accessories'
 
 class Accessory(models.Model):
     name          = models.CharField(max_length=100)
@@ -113,34 +101,27 @@ class Accessory(models.Model):
     class Meta:
         db_table  = 'accessories'
 
-
 class AccessoryCategory(models.Model):
     category     = models.CharField(max_length=100)
 
     class Meta:
-        db_table = 'accessorycategories'
-
+        db_table = 'accessory_categories'
 
 class ModelVersionLinePackage(models.Model):
     model_version_line   = models.ForeignKey('ModelVersionLine', on_delete=models.SET_NULL, null=True)
     package              = models.ForeignKey('Package',on_delete=models.SET_NULL, null=True)
-    custom_car           = models.ForeignKey('CustomCar',on_delete=models.SET_NULL, null=True)
+    custom_car_option    = models.ForeignKey('CustomCarOption',on_delete=models.SET_NULL, null=True)
 
     class Meta:
-        db_table         = 'modelversionlinepackages'
-
+        db_table         = 'model_version_line_packages'
 
 class Package(models.Model):
-    name         = models.CharField(max_length=100)
-    list1        = models.CharField(max_length=500)
-    list2        = models.CharField(max_length=500)
-    list3        = models.CharField(max_length=500)
-    list4        = models.CharField(max_length=500)
-
+    name                = models.CharField(max_length=100)
+    description         = models.TextField()
+    description_list    = models.TextField()
+    
     class Meta:
         db_table = 'packages'
-
-
 
 class ExteriorGroup(models.Model):
     exterior     = models.ForeignKey('Exterior', on_delete=models.SET_NULL, null= True)
@@ -148,8 +129,7 @@ class ExteriorGroup(models.Model):
     caliper      = models.ForeignKey('Caliper', on_delete=models.SET_NULL, null=True)
 
     class Meta:
-        db_table = 'exteriorgroups'
-
+        db_table = 'exterior_groups'
 
 class Exterior(models.Model):
      model_version_line = models.ForeignKey('ModelVersionLine', on_delete=models.SET_NULL, null=True)
@@ -159,14 +139,12 @@ class Exterior(models.Model):
      class Meta:
          db_table       = 'exteriors'
 
-
 class ExteriorType(models.Model):
     color           = models.ForeignKey('Color', on_delete=models.SET_NULL, null=True)
-    thumnail_url    = models.URLField(max_length=2000)
+    thumbnail_url    = models.URLField(max_length=2000)
 
     class Meta:
-        db_table    = 'exteriortypes'
-
+        db_table    = 'exterior_types'
 
 class Wheel(models.Model):
     model_version_line  = models.ForeignKey('ModelVersionLine', on_delete=models.SET_NULL, null=True)
@@ -176,14 +154,12 @@ class Wheel(models.Model):
     class Meta:
         db_table        = 'wheels'
 
-
 class WheelType(models.Model):
     name            = models.CharField(max_length=100)
     thumbnail_url    = models.URLField(max_length=2000)
 
     class Meta:
-        db_table    = 'wheeltypes'
-
+        db_table    = 'wheel_types'
 
 class Caliper(models.Model):
     model_version_line  = models.ForeignKey('ModelVersionLine',on_delete=models.SET_NULL, null=True)
@@ -193,14 +169,12 @@ class Caliper(models.Model):
     class Meta:
         db_table        = 'calipers'
 
-
 class CaliperType(models.Model):
     color           = models.ForeignKey('Color', on_delete=models.SET_NULL,null=True)
-    thumbnail_url    = models.URLField(max_length=2000)
+    thumbnail_url   = models.URLField(max_length=2000)
 
     class Meta:
-        db_table    = 'calipertypes'
-
+        db_table    = 'caliper_types'
 
 class InteriorGroup(models.Model):
     seat            = models.ForeignKey('Seat',on_delete=models.SET_NULL, null=True)
@@ -209,8 +183,7 @@ class InteriorGroup(models.Model):
     steering        = models.ForeignKey('Steering', on_delete=models.SET_NULL, null=True)
 
     class Meta:
-        db_table    = 'interiorgroups'
-
+        db_table    = 'interior_groups'
 
 class Seat(models.Model):
      model_version_line = models.ForeignKey('ModelVersionLine', on_delete=models.SET_NULL, null=True)
@@ -220,14 +193,12 @@ class Seat(models.Model):
      class Meta:
          db_table       = 'seats'
 
-
 class SeatType(models.Model):
     color               = models.ForeignKey('Color', on_delete=models.SET_NULL, null=True)
-    thumbnail_url        = models.URLField(max_length=2000)
+    thumbnail_url       = models.URLField(max_length=2000)
 
     class Meta:
-        db_table        = 'seattypes'
-
+        db_table        = 'seat_types'
 
 class Dashboard(models.Model):
     seat            = models.ForeignKey('Seat',on_delete=models.SET_NULL, null=True)
@@ -238,15 +209,12 @@ class Dashboard(models.Model):
     class Meta:
         db_table    = 'dashboards'
 
-
 class DashboardType(models.Model):
     color           = models.ForeignKey('Color', on_delete=models.SET_NULL, null=True)
-    thumbnail_url    = models.URLField(max_length=2000)
+    thumbnail_url   = models.URLField(max_length=2000)
 
     class Meta:
-        db_table    = 'dashboardtypes'
-
-
+        db_table    = 'dashboard_types'
 
 class Carpet(models.Model):
     dashboard       = models.ForeignKey('Dashboard', on_delete=models.SET_NULL, null=True)
@@ -258,12 +226,10 @@ class Carpet(models.Model):
 
 class CarpetType(models.Model):
     color           = models.ForeignKey('Color',on_delete=models.SET_NULL, null=True)
-    thumnail_url    = models.URLField(max_length=2000)
+    thumbnail_url    = models.URLField(max_length=2000)
 
     class Meta:
-        db_table    = 'carpettypes'
-
-
+        db_table    = 'carpet_types'
 
 class Steering(models.Model):
     dashboard       = models.ForeignKey('Dashboard', on_delete=models.SET_NULL, null=True)
@@ -273,16 +239,9 @@ class Steering(models.Model):
     class Meta:
         db_table   = 'steerings'
 
-
 class SteeringType(models.Model):
     color           = models.ForeignKey('Color', on_delete=models.SET_NULL, null=True)
-    thumnail_url    = models.URLField(max_length=2000)
+    thumbnail_url   = models.URLField(max_length=2000)
 
-
-
-
-
-
-
-
-
+    class Meta:
+        db_table    = 'steering_types'

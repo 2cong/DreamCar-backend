@@ -1,5 +1,5 @@
 from django.db 		import models
-from car.models		import *
+from car.models		import ModelVersionLine
 
 class User(models.Model):
     first_name     = models.CharField(max_length = 200)
@@ -18,7 +18,7 @@ class AddressCity(models.Model):
     city  = models.CharField(max_length = 50)
 
     class Meta:
-        db_table = 'addresscitise'
+        db_table = 'address_citise'
 
 class Gender(models.Model):
     name = models.CharField(max_length = 50)
@@ -32,8 +32,7 @@ class TestDrive(models.Model):
     current_car_model    = models.CharField(max_length = 50)
 
     class Meta:
-        db_table = 'testdrives'
-
+        db_table = 'test_drives'
 
 class TestDriveSchedule(models.Model):
     model_version_line  = models.ForeignKey('car.ModelVersionLine', on_delete = models.SET_NULL, null = True)
@@ -42,13 +41,13 @@ class TestDriveSchedule(models.Model):
     contact_us          = models.TextField
 
     class Meta:
-        db_table = 'testdriveschedules'
+        db_table = 'test_drive_schedules'
 
 class ExpectDate(models.Model):
     period  = models.CharField(max_length = 100)
 
     class Meta:
-        db_table = 'expectdates'
+        db_table = 'expect_dates'
 
 class StoreInformation(models.Model):
     store_name        = models.CharField(max_length = 50)
@@ -62,4 +61,4 @@ class StoreInformation(models.Model):
     description2      = models.CharField(max_length = 2000)
 
     class Meta:
-        db_table = 'storeinformations'
+        db_table = 'store_informations'
