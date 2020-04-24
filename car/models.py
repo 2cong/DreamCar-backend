@@ -241,7 +241,7 @@ class Dashboard(models.Model):
 
 class DashboardType(models.Model):
     color           = models.ForeignKey('Color', on_delete=models.SET_NULL, null=True)
-    thumnail_url    = models.URLField(max_length=2000)
+    thumbnail_url    = models.URLField(max_length=2000)
 
     class Meta:
         db_table    = 'dashboardtypes'
@@ -277,7 +277,6 @@ class Steering(models.Model):
 class SteeringType(models.Model):
     color           = models.ForeignKey('Color', on_delete=models.SET_NULL, null=True)
     thumnail_url    = models.URLField(max_length=2000)
-
 
 
 
