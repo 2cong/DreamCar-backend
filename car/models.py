@@ -196,7 +196,7 @@ class Caliper(models.Model):
 
 class CaliperType(models.Model):
     color           = models.ForeignKey('Color', on_delete=models.SET_NULL,null=True)
-    thumnail_url    = models.URLField(max_length=2000)
+    thumbnail_url    = models.URLField(max_length=2000)
 
     class Meta:
         db_table    = 'calipertypes'
@@ -277,7 +277,6 @@ class Steering(models.Model):
 class SteeringType(models.Model):
     color           = models.ForeignKey('Color', on_delete=models.SET_NULL, null=True)
     thumnail_url    = models.URLField(max_length=2000)
-
 
 
 
