@@ -38,7 +38,7 @@ class TestDriveSchedule(models.Model):
     model_version_line  = models.ForeignKey('car.ModelVersionLine', on_delete = models.SET_NULL, null = True)
     store_information   = models.ForeignKey('StoreInformation', on_delete = models.SET_NULL, null = True)
     expect_date         = models.ForeignKey('ExpectDate', on_delete = models.SET_NULL, null = True)
-    contact_us          = models.TextField
+    contact_us          = models.TextField()
 
     class Meta:
         db_table = 'test_drive_schedules'
@@ -53,8 +53,8 @@ class StoreInformation(models.Model):
     name        = models.CharField(max_length = 50)
     address     = models.CharField(max_length = 1000)
     city              = models.CharField(max_length = 50)
-    service_center    = models.BooleanField
-    exhibition_cneter = models.BooleanField
+    service_center    = models.BooleanField()
+    exhibition_cneter = models.BooleanField()
     telephone         = models.CharField(max_length = 50)
     fax               = models.CharField(max_length = 50)
     description1      = models.CharField(max_length = 2000)
