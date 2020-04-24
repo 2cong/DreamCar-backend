@@ -50,8 +50,8 @@ class ExpectDate(models.Model):
         db_table = 'expect_dates'
 
 class StoreInformation(models.Model):
-    store_name        = models.CharField(max_length = 50)
-    store_address     = models.CharField(max_length = 1000)
+    name        = models.CharField(max_length = 50)
+    address     = models.CharField(max_length = 1000)
     city              = models.CharField(max_length = 50)
     service_center    = models.BooleanField
     exhibition_cneter = models.BooleanField
