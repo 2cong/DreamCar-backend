@@ -1,0 +1,3 @@
+id,first_name,last_name,birthday,phone_number,address_city_id,address_detail,email,gender_id
+1,재성,이,1999-05-05,101000100,12,집,ljs@gmail.com,1
+2,진아,최,1995-04-18,10222202,2,집집,cjina@gmail.com,2

@@ -35,6 +35,7 @@ class Spec(models.Model):
     max_torque      = models.IntegerField(default = 0)
     max_power       = models.IntegerField(default = 0)
     engine_layout   = models.CharField(max_length = 50)
+    engine_bore     = models.DecimalField(max_digits = 10, decimal_places = 2)
     engine_stroke   = models.DecimalField(max_digits = 10, decimal_places = 2)
 
     class Meta:
@@ -86,6 +87,12 @@ class Color(models.Model):
     class Meta:
         db_table = 'colors'
 
+class ColorType(models.Model):
+    type_name  = models.CharField(max_length=50)
+
+    class Meta:
+        db_table = 'color_types'
+
 class CustomCarAccessory(models.Model):
     custom_car_option    = models.ForeignKey('CustomCarOption',on_delete=models.SET_NULL,null=True)
     accessory            = models.ForeignKey('Accessory',on_delete=models.SET_NULL, null=True)
@@ -119,7 +126,7 @@ class Package(models.Model):
     name                = models.CharField(max_length=100)
     description         = models.TextField()
     description_list    = models.TextField()
-    
+
     class Meta:
         db_table = 'packages'
 
@@ -141,7 +148,8 @@ class Exterior(models.Model):
 
 class ExteriorType(models.Model):
     color           = models.ForeignKey('Color', on_delete=models.SET_NULL, null=True)
-    thumbnail_url    = models.URLField(max_length=2000)
+    color_type      = models.ForeignKey('ColorType', on_delete=models.SET_NULL, null=True)
+    thumbnail_url   = models.URLField(max_length=2000)
 
     class Meta:
         db_table    = 'exterior_types'
