@@ -346,3 +346,27 @@ with open(CSV_PATH, newline='') as csvfile:
              wheel            = Wheel.objects.get(id = row['wheel_id']),
              caliper          = Caliper.objects.get(id = row['caliper_id'])
         )
+
+# Accessory_category
+CSV_PATH = './CSV/accessory_category.csv'
+
+with open(CSV_PATH, newline='') as csvfile:
+    data_reader = csv.DictReader(csvfile)
+
+    for row in data_reader:
+        AccessoryCategory.objects.create(
+            category = row['category']
+        )
+
+# Accessory
+CSV_PATH = './CSV/accessory.csv'
+
+with open(CSV_PATH, newline='') as csvfile:
+    data_reader = csv.DictReader(csvfile)
+
+    for row in data_reader:
+        Accessory.objects.create(
+            name = row['name'],
+            category = AccessoryCategory.objects.get(id=row['category']),
+            thumbnail_url = row['thumbnail_url']
+        )

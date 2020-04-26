@@ -102,11 +102,12 @@ class CustomCarAccessory(models.Model):
         db_table  = 'custom_car_accessories'
 
 class Accessory(models.Model):
-    name          = models.CharField(max_length=100)
-    category      = models.ForeignKey('AccessoryCategory',on_delete=models.SET_NULL,null=True)
+    name           = models.CharField(max_length=100)
+    category       = models.ForeignKey('AccessoryCategory',on_delete=models.SET_NULL,null=True)
+    thumbnail_url  = models.URLField(max_length=2000)
 
     class Meta:
-        db_table  = 'accessories'
+        db_table   = 'accessories'
 
 class AccessoryCategory(models.Model):
     category     = models.CharField(max_length=100)
