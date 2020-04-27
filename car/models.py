@@ -88,7 +88,7 @@ class Color(models.Model):
         db_table = 'colors'
 
 class ColorType(models.Model):
-    type_name  = models.CharField(max_length=50)
+    name  = models.CharField(max_length=50)
 
     class Meta:
         db_table = 'color_types'
@@ -103,7 +103,7 @@ class CustomCarAccessory(models.Model):
 
 class Accessory(models.Model):
     name           = models.CharField(max_length=100)
-    category       = models.ForeignKey('AccessoryCategory',on_delete=models.SET_NULL,null=True)
+    accessory_category       = models.ForeignKey('AccessoryCategory',on_delete=models.SET_NULL,null=True)
     thumbnail_url  = models.URLField(max_length=2000)
 
     class Meta:

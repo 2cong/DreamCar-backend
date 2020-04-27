@@ -127,7 +127,7 @@ with open(CSV_PATH, newline='') as csvfile:
 
     for row in data_reader:
         ColorType.objects.create(
-            type_name = row['type']
+            name = row['type']
         )
 
 # Seat_type
@@ -367,6 +367,6 @@ with open(CSV_PATH, newline='') as csvfile:
     for row in data_reader:
         Accessory.objects.create(
             name = row['name'],
-            category = AccessoryCategory.objects.get(id=row['category']),
+            accessory_category = AccessoryCategory.objects.get(id=row['category']),
             thumbnail_url = row['thumbnail_url']
         )
