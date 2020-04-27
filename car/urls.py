@@ -8,4 +8,4 @@ urlpatterns = [
         path('/caliper/<int:mvl_id>', CaliperView.as_view()),
         path('/seat/<int:mvl_id>', SeatView.as_view()),
 	path('/dashboard/<int:mvl_id>', DashBoardView.as_view()),
-        ]
+       ]
