@@ -105,7 +105,8 @@ with open(CSV_PATH, newline='') as csvfile:
             version = Version.objects.get(id=row['version_id']),
             line = Line.objects.get(id=row['line_id']),
             spec = Spec.objects.get(id=row['spec_id']),
-            dimension = Dimension.objects.get(id=row['dimension_id'])
+            dimension = Dimension.objects.get(id=row['dimension_id']),
+            code = row['code']
         )
 
 # color
@@ -152,7 +153,8 @@ with open(CSV_PATH, newline='') as csvfile:
         Seat.objects.create(
             model_version_line = ModelVersionLine.objects.get(id=row['model_version_line_id']),
             seat_type = SeatType.objects.get(id=row['seat_type_id']),
-            code = row['car_seat_image_code']
+            code1 = row['car_seat_image_code'],
+            code2 = row['code2']
         )
 
 # dashboard_type

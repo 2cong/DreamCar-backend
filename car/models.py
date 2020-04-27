@@ -24,6 +24,7 @@ class ModelVersionLine(models.Model):
     line          = models.ForeignKey('Line', on_delete = models.SET_NULL, null = True)
     spec          = models.ForeignKey('Spec', on_delete = models.SET_NULL, null = True)
     dimension     = models.ForeignKey('Dimension', on_delete = models.SET_NULL, null = True)
+    code          = models.CharField(max_length=100)
 
     class Meta:
         db_table  = 'model_version_lines'
@@ -197,7 +198,8 @@ class InteriorGroup(models.Model):
 class Seat(models.Model):
      model_version_line = models.ForeignKey('ModelVersionLine', on_delete=models.SET_NULL, null=True)
      seat_type          = models.ForeignKey('SeatType', on_delete=models.SET_NULL, null=True)
-     code               = models.CharField(max_length=100)
+     code1              = models.CharField(max_length=100)
+     code2              = models.CharField(max_length=100)
 
      class Meta:
          db_table       = 'seats'
