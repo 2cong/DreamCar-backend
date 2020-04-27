@@ -54,11 +54,11 @@ class StoreInformation(models.Model):
     address     = models.CharField(max_length = 1000)
     city              = models.CharField(max_length = 50)
     service_center    = models.BooleanField()
-    exhibition_cneter = models.BooleanField()
+    exhibition_center = models.BooleanField()
     telephone         = models.CharField(max_length = 50)
     fax               = models.CharField(max_length = 50)
     description1      = models.CharField(max_length = 2000)
     description2      = models.CharField(max_length = 2000)
 
     class Meta:
-        db_table = 'store_information'
+        db_table = 'store_informations'

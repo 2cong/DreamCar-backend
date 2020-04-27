@@ -24,6 +24,7 @@ class ModelVersionLine(models.Model):
     line          = models.ForeignKey('Line', on_delete = models.SET_NULL, null = True)
     spec          = models.ForeignKey('Spec', on_delete = models.SET_NULL, null = True)
     dimension     = models.ForeignKey('Dimension', on_delete = models.SET_NULL, null = True)
+    code          = models.CharField(max_length=100)
 
     class Meta:
         db_table  = 'model_version_lines'
@@ -35,6 +36,7 @@ class Spec(models.Model):
     max_torque      = models.IntegerField(default = 0)
     max_power       = models.IntegerField(default = 0)
     engine_layout   = models.CharField(max_length = 50)
+    engine_bore     = models.DecimalField(max_digits = 10, decimal_places = 2)
     engine_stroke   = models.DecimalField(max_digits = 10, decimal_places = 2)
 
     class Meta:
@@ -86,6 +88,12 @@ class Color(models.Model):
     class Meta:
         db_table = 'colors'
 
+class ColorType(models.Model):
+    name  = models.CharField(max_length=50)
+
+    class Meta:
+        db_table = 'color_types'
+
 class CustomCarAccessory(models.Model):
     custom_car_option    = models.ForeignKey('CustomCarOption',on_delete=models.SET_NULL,null=True)
     accessory            = models.ForeignKey('Accessory',on_delete=models.SET_NULL, null=True)
@@ -95,11 +103,12 @@ class CustomCarAccessory(models.Model):
         db_table  = 'custom_car_accessories'
 
 class Accessory(models.Model):
-    name          = models.CharField(max_length=100)
-    category      = models.ForeignKey('AccessoryCategory',on_delete=models.SET_NULL,null=True)
+    name           = models.CharField(max_length=100)
+    accessory_category       = models.ForeignKey('AccessoryCategory',on_delete=models.SET_NULL,null=True)
+    thumbnail_url  = models.URLField(max_length=2000)
 
     class Meta:
-        db_table  = 'accessories'
+        db_table   = 'accessories'
 
 class AccessoryCategory(models.Model):
     category     = models.CharField(max_length=100)
@@ -119,7 +128,7 @@ class Package(models.Model):
     name                = models.CharField(max_length=100)
     description         = models.TextField()
     description_list    = models.TextField()
-    
+
     class Meta:
         db_table = 'packages'
 
@@ -141,7 +150,8 @@ class Exterior(models.Model):
 
 class ExteriorType(models.Model):
     color           = models.ForeignKey('Color', on_delete=models.SET_NULL, null=True)
-    thumbnail_url    = models.URLField(max_length=2000)
+    color_type      = models.ForeignKey('ColorType', on_delete=models.SET_NULL, null=True)
+    thumbnail_url   = models.URLField(max_length=2000)
 
     class Meta:
         db_table    = 'exterior_types'
@@ -188,7 +198,8 @@ class InteriorGroup(models.Model):
 class Seat(models.Model):
      model_version_line = models.ForeignKey('ModelVersionLine', on_delete=models.SET_NULL, null=True)
      seat_type          = models.ForeignKey('SeatType', on_delete=models.SET_NULL, null=True)
-     code               = models.CharField(max_length=100)
+     code1              = models.CharField(max_length=100)
+     code2              = models.CharField(max_length=100)
 
      class Meta:
          db_table       = 'seats'

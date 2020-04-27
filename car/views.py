@@ -1,3 +1,10 @@
-from django.shortcuts import render
+import json
 
-# Create your views here.
+from django.http        import HttpResponse, JsonResponse
+from django.views       import View
+
+from .models            import *
+
+
+
+
