@@ -195,3 +195,14 @@ Temporary Items
 # Pyre type checker
 
 # End of https://www.gitignore.io/api/macos,django,python
+#
+# # Created by https://www.gitignore.io/api/cvs
+# Edit at https://www.gitignore.io/?templates=cvs
+
+### CVS ###
+/CVS/*
+**/CVS/*
+.cvsignore
+*/.cvsignore
+
+# End of https://www.gitignore.io/api/cvs
