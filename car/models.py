@@ -24,7 +24,7 @@ class ModelVersionLine(models.Model):
     line          = models.ForeignKey('Line', on_delete = models.SET_NULL, null = True)
     spec          = models.ForeignKey('Spec', on_delete = models.SET_NULL, null = True)
     dimension     = models.ForeignKey('Dimension', on_delete = models.SET_NULL, null = True)
-    code          = models.CharField(max_length=100)
+    code          = models.CharField(max_length=400)
 
     class Meta:
         db_table  = 'model_version_lines'
@@ -166,7 +166,7 @@ class Wheel(models.Model):
 
 class WheelType(models.Model):
     name            = models.CharField(max_length=100)
-    thumbnail_url    = models.URLField(max_length=2000)
+    thumbnail_url   = models.URLField(max_length=2000)
 
     class Meta:
         db_table    = 'wheel_types'
@@ -200,7 +200,6 @@ class Seat(models.Model):
      seat_type          = models.ForeignKey('SeatType', on_delete=models.SET_NULL, null=True)
      code1              = models.CharField(max_length=100)
      code2              = models.CharField(max_length=100)
-
      class Meta:
          db_table       = 'seats'
 
@@ -256,3 +255,16 @@ class SteeringType(models.Model):
 
     class Meta:
         db_table    = 'steering_types'
+
+class Default(models.Model):
+    model_version_line  = models.ForeignKey('ModelVersionLine', on_delete=models.SET_NULL, null=True)
+    exterior_type       = models.ForeignKey('ExteriorType', on_delete=models.SET_NULL, null=True)
+    wheel_type          = models.ForeignKey('WheelType', on_delete=models.SET_NULL, null=True)
+    caliper_type        = models.ForeignKey('CaliperType', on_delete=models.SET_NULL, null=True)
+    seat_type           = models.ForeignKey('SeatType', on_delete=models.SET_NULL, null=True)
+    dashboard_type      = models.ForeignKey('DashboardType', on_delete=models.SET_NULL, null=True)
+    carpet_type         = models.ForeignKey('CarpetType', on_delete=models.SET_NULL, null=True)
+    steering_type       = models.ForeignKey('SteeringType', on_delete=models.SET_NULL, null=True)
+
+    class Meta:
+        db_table        = 'defaults'
