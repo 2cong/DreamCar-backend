@@ -372,3 +372,21 @@ with open(CSV_PATH, newline='') as csvfile:
             accessory_category = AccessoryCategory.objects.get(id=row['category']),
             thumbnail_url = row['thumbnail_url']
         )
+
+# Default
+CSV_PATH = './CSV/default.csv'
+
+with open(CSV_PATH, newline='') as csvfile:
+    data_reader = csv.DictReader(csvfile)
+
+    for row in data_reader:
+        Default.objects.create(
+            model_version_line  = ModelVersionLine.objects.get(id=row['mvl_id']),
+            exterior_type       = ExteriorType.objects.get(id=row['exterior_type_id']),
+            wheel_type          = WheelType.objects.get(id=row['wheel_type_id']),
+            caliper_type        = CaliperType.objects.get(id=row['caliper_type_id']),
+            seat_type           = SeatType.objects.get(id=row['seat_type_id']),
+            dashboard_type      = DashboardType.objects.get(id=row['dashboard_type_id']),
+            carpet_type         = CarpetType.objects.get(id=row['carpet_type_id']),
+            steering_type       = SteeringType.objects.get(id=row['steering_type_id'])
+        )
