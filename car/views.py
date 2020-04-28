@@ -45,5 +45,3 @@ class DashboardView(View):
         possible_seat=Seat.objects.prefetch_related('dashboard_set').filter(model_version_line_id=mvl_id)
         for seat in possible_seat:
             seat.
-
-
