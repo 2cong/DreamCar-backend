@@ -11,7 +11,7 @@ class MainView(View):
         try:
             data = json.loads(request.body)
                 
-            model_version_line_id = data['mvl_id']
+            model_version_line_id = data['mvl']
             exterior_id           = data['exterior']
             wheel_id	          = data['wheel']
             caliper_id            = data['caliper']
@@ -58,7 +58,7 @@ class SummaryView(View):
         try:
             data = json.loads(request.body)
 
-            model_version_line_id = data['mvl_id']
+            model_version_line_id = data['mvl']
             exterior_id           = data['exterior']
             wheel_id              = data['wheel']
             caliper_id            = data['caliper']
