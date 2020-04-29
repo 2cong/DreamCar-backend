@@ -97,8 +97,8 @@ class CustomCarOptionView(View):
         dashboard           = data['dashboard']
         carpet              = data['carpet']
         steering            = data['steering']
-        package_list        = data.get('package_list',None)
-        accessory_dict      = data.get('accessory_dict',None)
+        package_list        = data.get('package',None)
+        accessory_list      = data.get('accessory',None)
 
         CustomCarOption.objects.create(
                 model_version_line   = ModelVersionLine.objects.get(id=model_version_line),
@@ -113,13 +113,12 @@ class CustomCarOptionView(View):
                     custom_car_option = CustomCarOption.objects.last()
                 )
 
-        if accessory_dict:
-            for accessories in accessory_dict.keys():
+        if accessory_list:
+            for accessories in accessory_list:
                 CustomCarAccessory.objects.create(
-                    quantity          = accessory_dict[accessories],
-                    accessory         = Accessory.objects.get(id=accessories),
-                    custom_car_option = CustomCarOption.objects.last()
+                    quantity          = accessories.get('quantity'),
+                    accessory         = Accessory.objects.get(id=accessories.get('id')),
+                   custom_car_option = CustomCarOption.objects.last()
                 )
-
 
         return HttpResponse(status=200)
