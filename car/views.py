@@ -7,7 +7,7 @@ from django.core.exceptions  import ObjectDoesNotExist
 from .models                 import *
 
 class MainView(View):
-    def post(self, request):
+    def get(self, request):
         try:
             data = json.loads(request.body)
                 
@@ -15,7 +15,7 @@ class MainView(View):
             exterior_id           = data['exterior']
             wheel_id	          = data['wheel']
             caliper_id            = data['caliper']
-            seat_id	          = data['seat']
+            seat_id	              = data['seat']
             dashboard_id          = data['dashboard']
             carpet_id             = data['carpet']
             steering_id           = data['steering']
@@ -23,38 +23,95 @@ class MainView(View):
             mvl       = ModelVersionLine.objects.get(id = model_version_line_id).code
             exterior  = ExteriorGroup.objects.select_related('exterior', 'wheel', 'caliper').get(exterior = exterior_id, wheel = wheel_id, caliper = caliper_id)
             interior  = InteriorGroup.objects.select_related('seat', 'dashboard', 'carpet', 'steering').get(seat = seat_id, dashboard = dashboard_id, carpet = carpet_id, steering = steering_id)
-           
+            
+            exterior1 = ImageUrl.objects.get(id = 1).image_url
+            exterior2 = ImageUrl.objects.get(id = 2).image_url
+            exterior3 = ImageUrl.objects.get(id = 3).image_url
+            exterior4 = ImageUrl.objects.get(id = 4).image_url
+            interior1 = ImageUrl.objects.get(id = 5).image_url
+            interior2 = ImageUrl.objects.get(id = 6).image_url                                                                                                               
+            interior3 = ImageUrl.objects.get(id = 7).image_url
+            interior4 = ImageUrl.objects.get(id = 8).image_url
+            preview   = ImageUrl.objects.get(id = 9).image_url
 
             exterior_url = [
              {
-                'Exterior1'  : f'https://ph.cloud.maserati.com/{mvl}/1280/c720/gfx6?config=background;shadow;CRPT/CRPT/94084217;INT/INT/94084310;BOE/Q136/INT/94084310;DUMMYOPTS/DOARM/94084281;DUMMYOPTS/DOPUH/94084282;TRIM/Q4MN;RUF/ROO1/94084295;DSH/DSHG/94084275;STEERINGWHEEL/STL1/94084213;BOE/Q5ZK;BOE/Q4B2;BOE/Q407;BOE/QAWS;FUS/Q410;CAL/{exterior.caliper.code};RIMS/{exterior.wheel.code};EXT/EXT/{exterior.exterior.code};MEC/Q5EM;glasses_front;MEC/Q400', 
-
-                'Exterior2'  : f'https://ph.cloud.maserati.com/{mvl}/1280/c720/gfx7?config=background;shadow;CRPT/CRPT/94084217;INT/INT/94084310;BOE/Q136/INT/94084310;DUMMYOPTS/DOARM/94084281;DUMMYOPTS/DOPUH/94084282;TRIM/Q4MN;RUF/ROO1/94084295;DSH/DSHG/94084275;STEERINGWHEEL/STL1/94084213;BOE/Q5ZK;BOE/Q4B2;BOE/Q407;BOE/QAWS;FUS/Q410;MEC/Q5EM;CAL/{exterior.caliper.code};RIMS/{exterior.wheel.code};EXT/EXT/{exterior.exterior.code};glasses_front;MEC/Q400;plates',
-
-                'Exterior3'  : f'https://ph.cloud.maserati.com/{mvl}/1280/c720/gfx3?config=background;shadow;CRPT/CRPT/94084217;RUF/ROO1/94084295;INT/INT/94084310;BOE/Q136/INT/94084310;DUMMYOPTS/DOARM/94084281;DUMMYOPTS/DOPUH/94084282;TRIM/Q4MN;DSH/DSHG/94084275;STEERINGWHEEL/STL1/94084213;BOE/Q5ZK;BOE/Q4B2;BOE/Q407;BOE/QAWS;FUS/Q410;CAL/{exterior.caliper.code};RIMS/{exterior.wheel.code};EXT/EXT/{exterior.exterior.code};MEC/Q5EM;glasses_front;MEC/Q400',
-
-                'Exterior4'  : f'https://ph.cloud.maserati.com/{mvl}/1280/c720/gfx5?config=background;shadow;CRPT/CRPT/94084217;RUF/ROO1/94084295;INT/INT/94084310;BOE/Q136/INT/94084310;DUMMYOPTS/DOARM/94084281;DUMMYOPTS/DOPUH/94084282;TRIM/Q4MN;DSH/DSHG/94084275;STEERINGWHEEL/STL1/94084213;BOE/Q5ZK;BOE/Q4B2;BOE/Q407;BOE/QAWS;FUS/Q410;CAL/{exterior.caliper.code};RIMS/{exterior.wheel.code};EXT/EXT/{exterior.exterior.code};MEC/Q5EM;glasses_front;MEC/Q400',
-
-                'interior1'  : f'https://ph.cloud.maserati.com/{mvl}/1280/c720/gfx9?config=background;shadow;glasses_front;MEC/Q400;CRPT/CRPT/94084217;BOE/Q728/CRPT/{interior.carpet.code};RUF/ROO1/94084295;INT/INT/94084213;DUMMYOPTS/DOARM/{interior.dashboard.code2};DUMMYOPTS/DOPUH/94084282;TRIM/Q4MN;DSH/DSHG/{interior.dashboard.code1};STEERINGWHEEL/STL1/{interior.steering.code};BOE/Q5ZK;BOE/{interior.seat.code2}/INT/{interior.seat.code1};BOE/Q4B2;BOE/Q407;BOE/QAWS;FUS/Q410;MEC/Q5EM;CAL/KMBC;RIMS/Q420;EXT/EXT/94084201',
-
-                'interior2'  : f'https://ph.cloud.maserati.com/{mvl}/1280/c720/gfx10?config=background;shadow;glasses_front;MEC/Q400;CRPT/CRPT/94084217;RUF/ROO1/94084297;INT/INT/94084213;BOE/{interior.seat.code2}/INT/{interior.seat.code1};DUMMYOPTS/DOARM/{interior.dashboard.code1};DUMMYOPTS/DOPUH/{interior.dashboard.code2};TRIM/Q4MN;DSH/DSHG/{interior.dashboard.code2};STEERINGWHEEL/STL1/{interior.steering.code};BOE/Q5ZK;BOE/Q4B2;BOE/Q212;BOE/Q407;BOE/QAWS;FUS/Q410;MEC/Q5EM;CAL/KMBC;RIMS/Q420;EXT/EXT/94084201',
-
-                'interior3'  : f'https://ph.cloud.maserati.com/{mvl}/1280/c720/gfx11?config=background;shadow;glasses_front;MEC/Q400;CRPT/CRPT/{interior.carpet.code};RUF/ROO1/94084295;INT/INT/94084349;DUMMYOPTS/DOARM/{interior.dashboard.code2};DUMMYOPTS/DOPUH/94084282;TRIM/Q4MN;DSH/DSHG/{interior.dashboard.code1};STEERINGWHEEL/STL1/94084213;BOE/Q5ZK;BOE/{interior.seat.code2}/INT/{interior.seat.code1};BOE/Q4B2;BOE/Q407;BOE/QAWS;FUS/Q410;MEC/Q5EM;CAL/KMBC;RIMS/Q420;EXT/EXT/9408420',
-    
-                'interior4'  : f'https://ph.cloud.maserati.com/{mvl}/1280/c720/gfx12?config=background;shadow;CRPT/CRPT/{interior.carpet.code};RUF/ROO1/94084296;INT/INT/94084213;BOE/{interior.seat.code2}/INT/{interior.seat.code1};DUMMYOPTS/DOARM/{interior.dashboard.code2};DUMMYOPTS/DOPUH/94084282;TRIM/Q4MN;DSH/DSHG/{interior.dashboard.code1};STEERINGWHEEL/STL1/{interior.steering.code};BOE/Q5ZK;BOE/Q4B2;BOE/Q407;BOE/QAWS;FUS/Q410;MEC/Q5EM;CAL/KMBC;RIMS/Q420;EXT/EXT/{exterior.exterior.code};glasses_front;MEC/Q400',
-
-                'preview_url': f'https://ph.cloud.maserati.com/{mvl}/400/c225/gfx6?config=background;shadow;CRPT/CRPT/94084217;INT/INT/94084310;BOE/Q136/INT/94084310;DUMMYOPTS/DOARM/94084281;DUMMYOPTS/DOPUH/94084282;TRIM/Q4MN;RUF/ROO1/94084295;DSH/DSHG/94084275;STEERINGWHEEL/STL1/94084213;BOE/Q5ZK;BOE/Q4B2;BOE/Q407;BOE/QAWS;FUS/Q410;CAL/{exterior.caliper.code};RIMS/{exterior.wheel.code};EXT/EXT/{exterior.exterior.code};MEC/Q5EM;glasses_front;MEC/Q400'
-              }
+                'Exterior1'  : exterior1.format(
+                                                mvl            = mvl, 
+                                                caliper_code   = exterior.caliper.code, 
+                                                wheel_code     = exterior.wheel.code, 
+                                                exterior_code  = exterior.exterior.code
+                                                ), 
+                'Exterior2'  : exterior2.format(
+                                                mvl           = mvl,
+                                                caliper_code  = exterior.caliper.code,
+                                                wheel_code    = exterior.wheel.code,
+                                                exterior_code = exterior.exterior.code 
+                                                ),
+                'Exterior3'  : exterior3.format(
+                                                mvl           = mvl,
+                                                caliper_code  = exterior.caliper.code,
+                                                wheel_code    = exterior.wheel.code,
+                                                exterior_code = exterior.exterior.code,
+                                                ),
+                'Exterior4'  : exterior4.format(
+                                                mvl           = mvl,
+                                                caliper_code  = exterior.caliper.code,
+                                                wheel_code    = exterior.wheel.code,
+                                                exterior_code = exterior.exterior.code,
+                                                ),
+                'interior1'  : interior1.format(
+                                                mvl             = mvl,
+                                                carpet_code     = interior.carpet.code,
+                                                dashboard_code2 = interior.dashboard.code2,
+                                                dashboard_code1 = interior.dashboard.code1,
+                                                steering_code   = interior.steering.code,
+                                                seat_code2      = interior.seat.code2,
+                                                seat_code1      = interior.seat.code1,
+                                                ),
+                'interior2'  : interior2.format(
+                                                mvl             = mvl,
+                                                seat_code2      = interior.seat.code2,
+                                                seat_code1      = interior.seat.code1,
+                                                dashboard_code1 = interior.dashboard.code1,
+                                                dashboard_code2 = interior.dashboard.code2,
+                                                steering_code   = interior.steering.code
+                                                ),
+                'interior3'  : interior3.format(
+                                                mvl             = mvl,
+                                                carpet_code     = interior.carpet.code,
+                                                seat_code2      = interior.seat.code2,
+                                                seat_code1      = interior.seat.code1,
+                                                dashboard_code1 = interior.dashboard.code1,
+                                                dashboard_code2 = interior.dashboard.code2
+                                                ),
+                'interior4'  : interior4.format(
+                                                mvl             = mvl,
+                                                carpet_code     = interior.carpet.code,
+                                                seat_code2      = interior.seat.code2,
+                                                seat_code1      = interior.seat.code1,
+                                                dashboard_code1 = interior.dashboard.code1,
+                                                dashboard_code2 = interior.dashboard.code2,
+                                                steering_code   = interior.steering.code,
+                                                exterior_code = exterior.exterior.code
+                                                ),
+                'preview'    : preview.format(
+                                                mvl            = mvl, 
+                                                caliper_code   = exterior.caliper.code, 
+                                                wheel_code     = exterior.wheel.code, 
+                                                exterior_code  = exterior.exterior.code                
+                                                )
+              }  
           ]
             return JsonResponse({'rendering_url': exterior_url}, status = 200)
 
-        except KeyError:
-            return HttpResponse(status = 400)
+#        except KeyError:
+#            return HttpResponse(status = 400)
         except ObjectDoesNotExist:
             return HttpResponse(status = 400)
 
 class SummaryView(View):
-    def post(self, request):
+    def get(self, request):
         try:
             data = json.loads(request.body)
 
@@ -70,18 +127,45 @@ class SummaryView(View):
             mvl       = ModelVersionLine.objects.get(id = model_version_line_id)
             exterior  = ExteriorGroup.objects.select_related('exterior', 'wheel', 'caliper').get(exterior = exterior_id, wheel = wheel_id, caliper = caliper_id)
             interior  = InteriorGroup.objects.select_related('seat', 'dashboard', 'carpet', 'steering').get(seat = seat_id, dashboard = dashboard_id, carpet = carpet_id, steering = steering_id)
-            spec      = list(Spec.objects.prefetch_related('ModelVersionLine_set').filter(modelversionline__id = model_version_line_id).values())[0]
-            dimension = list(Dimension.objects.prefetch_related('ModelVersionLine_set').filter(modelversionline__id = model_version_line_id).values())[0]
+            spec      = Spec.objects.prefetch_related('modelversionline_set').filter(modelversionline__id = model_version_line_id).values().first()
+            dimension = Dimension.objects.prefetch_related('modelversionline_set').filter(modelversionline__id = model_version_line_id).values().first()
+
+            exterior1 = ImageUrl.objects.get(id = 10).image_url
+            exterior2 = ImageUrl.objects.get(id = 11).image_url
+            interior1 = ImageUrl.objects.get(id = 12).image_url
+            preview   = ImageUrl.objects.get(id = 13).image_url
 
             summary_list = [
                              {
-                'Exterior1'  : f'https://ph.cloud.maserati.com/{mvl.code}/1280/c720/gfx6?config=background;shadow;CRPT/CRPT/94084217;INT/INT/94084310;BOE/Q136/INT/94084310;DUMMYOPTS/DOARM/94084281;DUMMYOPTS/DOPUH/94084282;TRIM/Q4MN;RUF/ROO1/94084295;DSH/DSHG/94084275;STEERINGWHEEL/STL1/94084213;BOE/Q5ZK;BOE/Q4B2;BOE/Q407;BOE/QAWS;FUS/Q410;CAL/{exterior.caliper.code};RIMS/{exterior.wheel.code};EXT/EXT/{exterior.exterior.code};MEC/Q5EM;glasses_front;MEC/Q400',
+                'Exterior1'  : exterior1.format(
+                                                mvl            = mvl.code, 
+                                                caliper_code   = exterior.caliper.code, 
+                                                wheel_code     = exterior.wheel.code, 
+                                                exterior_code  = exterior.exterior.code
+                                                ),
 
-                'Exterior2'  : f'https://ph.cloud.maserati.com/{mvl.code}/533/c300/gfx7?config=background;shadow;CRPT/CRPT/94084217;INT/INT/94084310;BOE/Q136/INT/94084310;DUMMYOPTS/DOARM/94084281;DUMMYOPTS/DOPUH/94084282;TRIM/Q4MN;RUF/ROO1/94084295;DSH/DSHG/94084275;STEERINGWHEEL/STL1/94084213;BOE/Q5ZK;BOE/Q4B2;BOE/Q407;BOE/QAWS;FUS/Q410;MEC/Q5EM;CAL/{exterior.caliper.code};RIMS/{exterior.wheel.code};EXT/EXT/{exterior.exterior.code};glasses_front;MEC/Q400;plates',
+                'Exterior2'  : exterior2.format(
+                                                mvl           = mvl.code,
+                                                caliper_code  = exterior.caliper.code,
+                                                wheel_code    = exterior.wheel.code,
+                                                exterior_code = exterior.exterior.code 
+                                                ),
 
-                'interior1'  : f'https://ph.cloud.maserati.com/{mvl.code}/533/c300/gfx10?config=background;shadow;glasses_front;MEC/Q400;CRPT/CRPT/94084217;RUF/ROO1/94084297;INT/INT/94084213;BOE/{interior.seat.code2}/INT/{interior.seat.code1};DUMMYOPTS/DOARM/{interior.dashboard.code1};DUMMYOPTS/DOPUH/{interior.dashboard.code2};TRIM/Q4MN;DSH/DSHG/{interior.dashboard.code2};STEERINGWHEEL/STL1/{interior.steering.code};BOE/Q5ZK;BOE/Q4B2;BOE/Q212;BOE/Q407;BOE/QAWS;FUS/Q410;MEC/Q5EM;CAL/KMBC;RIMS/Q420;EXT/EXT/94084201',
-
-                'preview_url': f'https://ph.cloud.maserati.com/{mvl.code}/533/c300/gfx6?config=background;shadow;CRPT/CRPT/94084217;INT/INT/94084310;BOE/Q136/INT/94084310;DUMMYOPTS/DOARM/94084281;DUMMYOPTS/DOPUH/94084282;TRIM/Q4MN;RUF/ROO1/94084295;DSH/DSHG/94084275;STEERINGWHEEL/STL1/94084213;BOE/Q5ZK;BOE/Q4B2;BOE/Q407;BOE/QAWS;FUS/Q410;CAL/{exterior.caliper.code};RIMS/{exterior.wheel.code};EXT/EXT/{exterior.exterior.code};MEC/Q5EM;glasses_front;MEC/Q400',
+                'interior1'  : interior1.format(
+                                                mvl             = mvl.code,
+                                                seat_code2      = interior.seat.code2,
+                                                seat_code1      = interior.seat.code1,
+                                                dashboard_code1 = interior.dashboard.code1,
+                                                dashboard_code2 = interior.dashboard.code2,
+                                                steering_code   = interior.steering.code
+                                                ),
+                 
+                'preview_url': preview.format(
+                                                mvl            = mvl.code, 
+                                                caliper_code   = exterior.caliper.code, 
+                                                wheel_code     = exterior.wheel.code, 
+                                                exterior_code  = exterior.exterior.code                
+                                                ),
 
                 'exterior' : {
                      'exterior' : exterior.exterior.exterior_type.color.name,
@@ -181,7 +265,5 @@ class AccessoryView(View):
                acc.category : list(acc.accessory_set.values('id', 'name', 'thumbnail_url'))
             } for acc in category
         ]
-
-        print(accessory_list)
 
         return JsonResponse({'accessory' : accessory_list}, status = 200)
