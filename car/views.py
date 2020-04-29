@@ -13,9 +13,9 @@ class MainView(View):
                 
             model_version_line_id = data['mvl_id']
             exterior_id           = data['exterior']
-            wheel_id	         = data['wheel']
+            wheel_id	          = data['wheel']
             caliper_id            = data['caliper']
-            seat_id	         = data['seat']
+            seat_id	          = data['seat']
             dashboard_id          = data['dashboard']
             carpet_id             = data['carpet']
             steering_id           = data['steering']
@@ -170,33 +170,6 @@ class CaliperView(View):
          ]
 
          return JsonResponse({'caliper thumbnail' : caliper_list}, status = 200)
-
-class SeatView(View):
-     def get(self, request, mvl_id):
-         seat     = Seat.objects.select_related('seat_type__color').filter(model_version_line = mvl_id)
-         
-         seat_list = [
-               {
-                    'seat_id'        : thumb.id,
-                    'seat_color'     : thumb.seat_type.color.name,
-                    'thumbnail_url'  : thumb.seat_type.thumbnail_url
-               } for thumb in seat
-         ]
-
-         return JsonResponse({'seat Thumbnail' : seat_list}, status = 200)
-
-class DashBoardView(View):
-     def get(self, request, mvl_id):
-         seat     = Seat.objects.prefetch_related('dashboard_set').filter(model_version_line = mvl_id)
-         
-         dashboard_list = [
-                   {
-                       'dashboard_color' : thumb.dashboard_set.values('dashboard_type__color__name')[0]['dashboard_type__color__name'],
-                       'thumbnail_url'   : thumb.dashboard_set.values('dashboard_type__thumbnail_url')[0]['dashboard_type__thumbnail_url']
-                   } for thumb in seat
-         ]
-
-         return JsonResponse({'dashboard thumbnail' : dashboard_list}, status = 200)
 
 class AccessoryView(View):
     def get(self, request):
