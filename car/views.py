@@ -15,7 +15,7 @@ class MainView(View):
             exterior_id           = data['exterior']
             wheel_id	          = data['wheel']
             caliper_id            = data['caliper']
-            seat_id	              = data['seat']
+            seat_id	          = data['seat']
             dashboard_id          = data['dashboard']
             carpet_id             = data['carpet']
             steering_id           = data['steering']
