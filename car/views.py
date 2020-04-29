@@ -105,8 +105,8 @@ class MainView(View):
           ]
             return JsonResponse({'rendering_url': exterior_url}, status = 200)
 
-#        except KeyError:
-#            return HttpResponse(status = 400)
+        except KeyError:
+            return HttpResponse(status = 400)
         except ObjectDoesNotExist:
             return HttpResponse(status = 400)
 
