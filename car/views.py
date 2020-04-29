@@ -8,8 +8,8 @@ from .models                    import *
 
 class DefaultView(View):
     def get(self,request,mvl_id):
-
         default_info = Default.objects.select_related('exterior_type','wheel_type','caliper_type','seat_type','dashboard_type','carpet_type','steering_type').filter(model_version_line_id=mvl_id)
+
         default_list = [
         {
             'exterior'   : {'color_id' : default.exterior_type.color.id,  'color' : default.exterior_type.color.name ,  'thumbnail_url' : default.exterior_type.thumbnail_url},
@@ -21,12 +21,12 @@ class DefaultView(View):
             'steering'   : {'color_id' : default.steering_type.color.id,  'color' : default.steering_type.color.name,   'thumbnail_url' : default.steering_type.thumbnail_url}}
             for default  in default_info]
 
-        return JsonResponse({'message':default_list},status=200)
+        return JsonResponse({'data':default_list},status=200)
 
 class SeatView(View):
     def get(self,request,mvl_id):
-
         seat_info        = Seat.objects.select_related('seat_type').filter(model_version_line_id=mvl_id)
+
         seat_color_list  = [
         {
             'color_id'       : color_info.seat_type.color.id,
@@ -34,45 +34,51 @@ class SeatView(View):
             'thumnbnail_url' : color_info.seat_type.thumbnail_url
         } for color_info in seat_info]
 
-        return JsonResponse({'message':seat_color_list}, status=200)
+        return JsonResponse({'data':seat_color_list}, status=200)
 
 class DashboardView(View):
     def get(self,request,mvl_id):
 
-        possible_seat   = Seat.objects.prefetch_related('dashboard_set').filter(model_version_line_id=mvl_id)
-        dashboard_list  = [
-         { f"seat_id = {seat.id}" : list(seat.dashboard_set.values('id','dashboard_type__color','dashboard_type__color__name','dashboard_type__thumbnail_url'))} for seat in possible_seat
-         ]
+        dashboard_list=[
+            { "seat_id"              : dashboard.seat.id,
+              "dashboard_id"         : dashboard.id,
+              "dashboard_color_id"   : dashboard.dashboard_type.color.id,
+              "dashboard_color_name" : dashboard.dashboard_type.color.name,
+              "dashboard_thumbnail"  : dashboard.dashboard_type.thumbnail_url
+             } for dashboard in Dashboard.objects.filter(seat__model_version_line_id=mvl_id)]
 
-        return JsonResponse({'messsage':dashboard_list},status=200)
+        return JsonResponse({'data':dashboard_list},status=200)
 
 class CarpetView(View):
     def get(self,request,mvl_id):
 
-        possible_seat = Seat.objects.prefetch_related('dashboard_set').filter(model_version_line_id=mvl_id)
-        carpet_list   = [
-            {f"seat_id = {seat.id}" :
-             {f"dashboard_id = {dashboard.id}" :
-              list(dashboard.carpet_set.values('id','carpet_type__color','carpet_type__color__name','carpet_type__thumbnail_url'))for dashboard in Dashboard.objects.prefetch_related('carpet_set').filter(seat_id=seat.id)}} for seat in possible_seat
-        ]
+        carpet_list = [
+            { "seat_id"           : carpet.dashboard.seat.id,
+              "dashboard_id"      : carpet.dashboard.id,
+              "carpet_id"         : carpet.id,
+              "carpet_color_id"   : carpet.carpet_type.color.id,
+              "carpet_color_name" : carpet.carpet_type.color.name,
+              "carpet_thumbnail"  : carpet.carpet_type.thumbnail_url
+             } for carpet in Carpet.objects.filter(dashboard__seat__model_version_line_id=mvl_id)]
 
-        return JsonResponse({'message':carpet_list},status=200)
+        return JsonResponse({'data':carpet_list},status=200)
 
 class SteeringView(View):
     def get(self,request,mvl_id):
 
-        possible_seat = Seat.objects.prefetch_related('dashboard_set').filter(model_version_line_id=mvl_id)
-        steering_list =  [
-            {f"seat_id = {seat.id}" :
-         {f"dashboard_id = {dashboard.id}" :
-          list(dashboard.steering_set.values('id','steering_type__color','steering_type__color__name','steering_type__thumbnail_url'))for dashboard in Dashboard.objects.prefetch_related('steering_set').filter(seat_id=seat.id)}}for seat in possible_seat
-        ]
+        steering_list = [
+            { "seat_id"             : steering.dashboard.seat.id,
+              "dashboard_id"        : steering.dashboard.id,
+              "steering_id"         : steering.id,
+              "steering_color_id"   : steering.steering_type.color.id,
+              "steering_color_name" : steering.steering_type.color.name,
+              "steering_thumbnail"  : steering.steering_type.thumbnail_url
+             } for steering in Steering.objects.filter(dashboard__seat__model_version_line_id=mvl_id)]
 
-        return JsonResponse({'message':steering_list},status=200)
+        return JsonResponse({'data':steering_list},status=200)
 
 class PackageView(View):
     def get(self,request,mvl_id):
-
         mvl_package=ModelVersionLinePackage.objects.filter(model_version_line_id=mvl_id)
 
         package_list=[
@@ -82,11 +88,10 @@ class PackageView(View):
               "description_list" : package.package.description_list
         }for package in mvl_package ]
 
-        return JsonResponse({"message":package_list},status=200)
+        return JsonResponse({"data":package_list},status=200)
 
 class CustomCarOptionView(View):
     def post(self,request):
-
         data                = json.loads(request.body)
 
         model_version_line  = data['mvl']
