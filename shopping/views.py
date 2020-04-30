@@ -5,8 +5,16 @@ from django.views           import View
 from django.core.exceptions import ObjectDoesNotExist
 from django.db              import transaction
 
-from .models            import *
 from car.models         import ModelVersionLine
+from .models            import  ( User, 
+                                  DriveContactChannel,
+                                  AddressCity,
+                                  Gender,
+                                  TestDrive,
+                                  TestDriveSchedule,
+                                  ExpectDate,
+                                  StoreInformation
+                                )
 
 class UserView(View):
     @transaction.atomic
@@ -52,18 +60,17 @@ class UserView(View):
             return HttpResponse(status = 200)
 
         except KeyError:
-            print('keyerror')
             return HttpResponse(status = 400)
+
         except ValueError:
-            print('valueerror')
             return HttpResponse(status = 400)
+
         except ObjectDoesNotExist:
-            print('notexist')
             return HttpResponse(status = 400)
 
     def get(self, request):
         cities             = AddressCity.objects.all()
-        exhibition_centers = list(StoreInformation.objects.filter(exhibition_center = 1))
+        exhibition_centers = list(StoreInformation.objects.filter(exhibition_center = True))
 
         cities_list = [
                 {

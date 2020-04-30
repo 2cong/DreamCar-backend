@@ -26,7 +26,7 @@ urlpatterns = [
         path('/carpet/<int:mvl_id>',CarpetView.as_view()),
         path('/steering/<int:mvl_id>',SteeringView.as_view()),
         path('/package/<int:mvl_id>',PackageView.as_view()),
-        path('/accessory', AccessoryView.as_view())
+        path('/accessory', AccessoryView.as_view()),
         path('/summary', SummaryView.as_view()),
         path('/customcaroption',CustomCarOptionView.as_view()),
        ]

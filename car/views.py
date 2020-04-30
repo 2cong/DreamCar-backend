@@ -3,6 +3,7 @@ import json
 from django.http             import HttpResponse, JsonResponse
 from django.views            import View
 from django.core.exceptions  import ObjectDoesNotExist
+from django.db               import transaction
 
 from .models                 import *
 
@@ -229,8 +230,8 @@ class AccessoryView(View):
 
         return JsonResponse({'accessory' : accessory_list}, status = 200)
 
-@transaction.atomic
 class CustomCarOptionView(View):
+    @transaction.atomic
     def post(self,request):
         data                = json.loads(request.body)
 
