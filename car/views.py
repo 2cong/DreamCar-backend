@@ -1,4 +1,5 @@
 import json
+import uuid
 
 from django.http                import HttpResponse, JsonResponse
 from django.views               import View
@@ -90,8 +91,8 @@ class PackageView(View):
 
         return JsonResponse({"data":package_list},status=200)
 
-@transaction.atomic
 class CustomCarOptionView(View):
+    @transaction.atomic
     def post(self,request):
         data                = json.loads(request.body)
 
@@ -128,3 +129,66 @@ class CustomCarOptionView(View):
                 )
 
         return HttpResponse(status=200)
+
+class ContachChannelView(View):
+    def get(self,request):
+
+        contact_list = [
+            {"id":1, "name":"mail"},
+            {"id":2, "name":"call"},
+            {"id":3, "name":"sns"},
+        ]
+
+        return JsonResponse({"data":contact_list},status=200)
+
+class CustomCarView(View):
+    @transaction.atomic
+    def post(self,request):
+        data = json.loads(request.body)
+        contact_channel = data['contact_channel']
+        try:
+            for contact in contact_channel :
+                ContactChannel.objects.create(
+                    mail = contact['mail'],
+                    call = contact['call'],
+                    sns = contact['sns'],
+                    sms = contact['sms'],
+                    fax = contact['fax'],
+                    email = contact['email']
+            )
+
+            code_id = str(CustomCar.objects.count())[-1]
+            CustomCar.objects.create(
+                email = data['name'],
+                name = data['name'],
+                code = (str(uuid.uuid4())[0:5]+str(uuid.uuid4)[1:3]+code_id).upper(),
+                contact_channel = ContactChannel.objects.last(),
+                privacy_check = data['privacy_check'],
+                custom_car_option = CustomCarOption.objects.last()
+            )
+        except KeyError:
+            return HttpResponse(statu=400)
+
+        return JsonResponse({"code":CustomCar.objects.last().code},status=200)
+
+class LoadView(View):
+    def get(self,request):
+        data = json.loads(request.body)
+        code = data['code']
+
+        try :
+            if CustomCar.objects.filter(code=code).exists():
+                summary = CustomCar.objects.select_related('custom_car_option','custom_car_option__exterior_grop','custom_car_option__interior_group','custom_car_option__model_version_line').get(code=code)
+
+                summary_list = [
+                    { "mvl_id" : summary.custom_car_option.model_version_line.id,
+                      "interior" : summary.interior_group_option.interior_group.id,
+                      "exterior" : summary.exterior_group.option.interior
+                     }
+                ]
+                return JsonResponse({"data":summary_list},status=200)
+
+            else:
+                return JsonResponse({"message":"INVALID_CODE"}, status = 401)
+        except KeyError:
+            return HttpResponse(status = 400)

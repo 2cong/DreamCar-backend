@@ -93,7 +93,7 @@ class ContactChannel(models.Model):
     email = models.BooleanField()
 
     class Meta:
-        db_table = 'custom_channels'
+        db_table = 'contact_channels'
 
 class Color(models.Model):
     name         = models.CharField(max_length=100)

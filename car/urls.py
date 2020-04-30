@@ -6,7 +6,9 @@ from .views         import (
     CarpetView,
     SteeringView,
     PackageView,
-    CustomCarOptionView
+    CustomCarOptionView,
+    CustomCarView,
+    LoadView
 )
 
 urlpatterns = [
@@ -16,5 +18,7 @@ urlpatterns = [
     path('/carpet/<int:mvl_id>',CarpetView.as_view()),
     path('/steering/<int:mvl_id>',SteeringView.as_view()),
     path('/package/<int:mvl_id>',PackageView.as_view()),
-    path('/customcaroption',CustomCarOptionView.as_view())
+    path('/customcaroption',CustomCarOptionView.as_view()),
+    path('/customcar',CustomCarView.as_view()),
+    path('/load',LoadView.as_view())
     ]
