@@ -64,11 +64,11 @@ class Dimension(models.Model):
         db_table        = 'dimensions'
 
 class CustomCarOption(models.Model):
-    model_version_line  = models.ForeignKey('ModelVersionLine', on_delete=models.SET_NULL, null=True)
-    exterior_group      = models.ForeignKey('ExteriorGroup',on_delete=models.SET_NULL, null=True)
-    interior_group      = models.ForeignKey('InteriorGroup', on_delete=models.SET_NULL, null=True)
-    customcar_accessory = models.ManyToManyField('Accessory', through='CustomCarAccessory')
-    package             = models.ManyToManyField('Package', through='ModelVersionLinePackage')
+    model_version_line      = models.ForeignKey('ModelVersionLine', on_delete=models.SET_NULL, null=True)
+    exterior_group          = models.ForeignKey('ExteriorGroup',on_delete=models.SET_NULL, null=True)
+    interior_group          = models.ForeignKey('InteriorGroup', on_delete=models.SET_NULL, null=True)
+    customcar_accessory     = models.ManyToManyField('Accessory', through='CustomCarAccessory')
+    package                 = models.ManyToManyField('Package', through='PackageCustomCar')
 
     class Meta:
         db_table        = 'custom_car_options'
@@ -78,9 +78,22 @@ class CustomCar(models.Model):
     name                = models.CharField(max_length=200)
     email               = models.EmailField(max_length=200)
     code                = models.CharField(max_length=400)
+    contact_channel     = models.ForeignKey('ContactChannel',on_delete=models.SET_NULL, null=True)
+    privacy_check       = models.BooleanField()
 
     class Meta:
         db_table = 'custom_cars'
+
+class ContactChannel(models.Model):
+    mail  = models.BooleanField()
+    call  = models.BooleanField()
+    sns   = models.BooleanField()
+    sms   = models.BooleanField()
+    fax   = models.BooleanField()
+    email = models.BooleanField()
+
+    class Meta:
+        db_table = 'custom_channels'
 
 class Color(models.Model):
     name         = models.CharField(max_length=100)
@@ -119,7 +132,6 @@ class AccessoryCategory(models.Model):
 class ModelVersionLinePackage(models.Model):
     model_version_line   = models.ForeignKey('ModelVersionLine', on_delete=models.SET_NULL, null=True)
     package              = models.ForeignKey('Package',on_delete=models.SET_NULL, null=True)
-    custom_car_option    = models.ForeignKey('CustomCarOption',on_delete=models.SET_NULL, null=True)
 
     class Meta:
         db_table         = 'model_version_line_packages'
@@ -131,6 +143,13 @@ class Package(models.Model):
 
     class Meta:
         db_table = 'packages'
+
+class PackageCustomCar(models.Model):
+    custom_car_option = models.ForeignKey('CustomCarOption',on_delete=models.SET_NULL,null=True)
+    package = models.ForeignKey('Package',on_delete=models.SET_NULL, null=True)
+
+    class Meta:
+        db_table = 'package_custom_cars'
 
 class ExteriorGroup(models.Model):
     exterior     = models.ForeignKey('Exterior', on_delete=models.SET_NULL, null= True)
