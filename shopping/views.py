@@ -61,9 +61,6 @@ class UserView(View):
             print('notexist')
             return HttpResponse(status = 400)
 
-
-
-
     def get(self, request):
         cities             = AddressCity.objects.all()
         exhibition_centers = list(StoreInformation.objects.filter(exhibition_center = 1))
