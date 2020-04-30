@@ -401,3 +401,15 @@ with open(CSV_PATH, newline='')as csvfile:
             model_version_line = ModelVersionLine.objects.get(id=row['model_version_line_id']),
             package            = Package.objects.get(id=row['package_id'])
         )
+        
+# image url
+CSV_PATH = './CSV/image_url.csv'
+
+with open(CSV_PATH, newline='') as csvfile:
+    data_reader = csv.DictReader(csvfile)
+
+    for row in data_reader:
+        ImageUrl.objects.create(
+            name       = row['name'],
+            image_url  = row['image_url']
+        )
