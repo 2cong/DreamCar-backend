@@ -2,17 +2,30 @@ from django.db 		import models
 from car.models		import ModelVersionLine
 
 class User(models.Model):
-    first_name     = models.CharField(max_length = 200)
-    last_name      = models.CharField(max_length = 200)
-    birthday       = models.DateField()
-    phonenumber    = models.CharField(max_length = 200)
-    address_city   = models.ForeignKey('AddressCity',on_delete = models.SET_NULL, null = True)
-    address_detail = models.CharField(max_length = 1000)
-    email          = models.EmailField(max_length = 200)
-    gender         = models.ForeignKey('Gender',on_delete = models.SET_NULL, null = True)
+    first_name             = models.CharField(max_length = 200)
+    last_name              = models.CharField(max_length = 200)
+    birthday               = models.DateField()
+    phone_number           = models.CharField(max_length = 200)
+    address_city           = models.ForeignKey('AddressCity', on_delete = models.SET_NULL, null = True)
+    address_detail         = models.CharField(max_length = 1000)
+    email                  = models.EmailField(max_length = 200)
+    gender                 = models.ForeignKey('Gender', on_delete = models.SET_NULL, null = True)
+    drive_contact_channel  = models.ForeignKey('DriveContactChannel', on_delete = models.SET_NULL, null = True)
+    privacy_check          = models.BooleanField()
 
     class Meta:
         db_table = 'users'
+
+class DriveContactChannel(models.Model):
+    email = models.BooleanField()
+    fax   = models.BooleanField()
+    mail  = models.BooleanField()
+    sms   = models.BooleanField()
+    call  = models.BooleanField()
+    sns   = models.BooleanField()
+
+    class Meta:
+        db_table = 'drive_contact_channels'
 
 class AddressCity(models.Model):
     city  = models.CharField(max_length = 50)
@@ -50,8 +63,8 @@ class ExpectDate(models.Model):
         db_table = 'expect_dates'
 
 class StoreInformation(models.Model):
-    name        = models.CharField(max_length = 50)
-    address     = models.CharField(max_length = 1000)
+    name              = models.CharField(max_length = 50)
+    address           = models.CharField(max_length = 1000)
     city              = models.CharField(max_length = 50)
     service_center    = models.BooleanField()
     exhibition_center = models.BooleanField()
