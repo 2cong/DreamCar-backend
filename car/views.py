@@ -2,7 +2,7 @@ import json
 
 from django.http                import HttpResponse, JsonResponse
 from django.views               import View
-from django.core.exceptions     import ObjectDoesNotExist
+from django.db                  import transaction
 
 from .models                    import *
 
@@ -25,7 +25,7 @@ class DefaultView(View):
 
 class SeatView(View):
     def get(self,request,mvl_id):
-        seat_info        = Seat.objects.select_related('seat_type').filter(model_version_line_id=mvl_id)
+        seat_info        = Seat.objects.select_related('seat_type','seat_type__color').filter(model_version_line_id=mvl_id)
 
         seat_color_list  = [
         {
@@ -59,7 +59,7 @@ class CarpetView(View):
               "carpet_color_id"   : carpet.carpet_type.color.id,
               "carpet_color_name" : carpet.carpet_type.color.name,
               "carpet_thumbnail"  : carpet.carpet_type.thumbnail_url
-             } for carpet in Carpet.objects.select_related('carpet_type').filter(dashboard__seat__model_version_line_id=mvl_id)]
+             } for carpet in Carpet.objects.select_related('carpet_type','dashboard','carpet_type__color').filter(dashboard__seat__model_version_line_id=mvl_id)]
 
         return JsonResponse({'data':carpet_list},status=200)
 
@@ -73,13 +73,13 @@ class SteeringView(View):
               "steering_color_id"   : steering.steering_type.color.id,
               "steering_color_name" : steering.steering_type.color.name,
               "steering_thumbnail"  : steering.steering_type.thumbnail_url
-             } for steering in Steering.objects.select_related('steering_type').filter(dashboard__seat__model_version_line_id=mvl_id)]
+             } for steering in Steering.objects.select_related('steering_type','dashboard','steering_type__color').filter(dashboard__seat__model_version_line_id=mvl_id)]
 
         return JsonResponse({'data':steering_list},status=200)
 
 class PackageView(View):
     def get(self,request,mvl_id):
-        mvl_package=ModelVersionLinePackage.objects.filter(model_version_line_id=mvl_id)
+        mvl_package=ModelVersionLinePackage.objects.select_related('package').filter(model_version_line_id=mvl_id)
 
         package_list=[
             { "package_id" : package.package.id,
@@ -90,6 +90,7 @@ class PackageView(View):
 
         return JsonResponse({"data":package_list},status=200)
 
+@transaction.atomic
 class CustomCarOptionView(View):
     def post(self,request):
         data                = json.loads(request.body)

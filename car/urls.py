@@ -1,5 +1,13 @@
 from django.urls    import path
-from .views         import DefaultView, SeatView, DashboardView, CarpetView, SteeringView, PackageView, CustomCarOptionView
+from .views         import (
+    DefaultView,
+    SeatView,
+    DashboardView,
+    CarpetView,
+    SteeringView,
+    PackageView,
+    CustomCarOptionView
+)
 
 urlpatterns = [
     path('/default/<int:mvl_id>',DefaultView.as_view()),
