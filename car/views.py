@@ -45,7 +45,7 @@ class DashboardView(View):
               "dashboard_color_id"   : dashboard.dashboard_type.color.id,
               "dashboard_color_name" : dashboard.dashboard_type.color.name,
               "dashboard_thumbnail"  : dashboard.dashboard_type.thumbnail_url
-             } for dashboard in Dashboard.objects.filter(seat__model_version_line_id=mvl_id)]
+             } for dashboard in Dashboard.objects.select_related('dashboard_type').filter(seat__model_version_line_id=mvl_id)]
 
         return JsonResponse({'data':dashboard_list},status=200)
 
@@ -59,7 +59,7 @@ class CarpetView(View):
               "carpet_color_id"   : carpet.carpet_type.color.id,
               "carpet_color_name" : carpet.carpet_type.color.name,
               "carpet_thumbnail"  : carpet.carpet_type.thumbnail_url
-             } for carpet in Carpet.objects.filter(dashboard__seat__model_version_line_id=mvl_id)]
+             } for carpet in Carpet.objects.select_related('carpet_type').filter(dashboard__seat__model_version_line_id=mvl_id)]
 
         return JsonResponse({'data':carpet_list},status=200)
 
@@ -73,7 +73,7 @@ class SteeringView(View):
               "steering_color_id"   : steering.steering_type.color.id,
               "steering_color_name" : steering.steering_type.color.name,
               "steering_thumbnail"  : steering.steering_type.thumbnail_url
-             } for steering in Steering.objects.filter(dashboard__seat__model_version_line_id=mvl_id)]
+             } for steering in Steering.objects.select_related('steering_type').filter(dashboard__seat__model_version_line_id=mvl_id)]
 
         return JsonResponse({'data':steering_list},status=200)
 
@@ -107,8 +107,8 @@ class CustomCarOptionView(View):
 
         CustomCarOption.objects.create(
                 model_version_line   = ModelVersionLine.objects.get(id=model_version_line),
-                exterior_group       = ExteriorGroup.objects.get(exterior_id=exterior,wheel_id=wheel,  caliper_id=caliper),
-                interior_group       = InteriorGroup.objects.get(seat_id=seat,dashboard_id=dashboard,  carpet_id=carpet,steering_id=steering)
+                exterior_group       = ExteriorGroup.objects.get(exterior_id=exterior,wheel_id=wheel,caliper_id=caliper),
+                interior_group       = InteriorGroup.objects.get(seat_id=seat,dashboard_id=dashboard,carpet_id=carpet,steering_id=steering)
             )
 
         if package_list:

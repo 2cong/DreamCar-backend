@@ -6,10 +6,10 @@ class User(models.Model):
     last_name      = models.CharField(max_length = 200)
     birthday       = models.DateField()
     phonenumber    = models.CharField(max_length = 200)
-    address_city   = models.OneToOneField('AddressCity', on_delete = models.SET_NULL, null = True)
+    address_city   = models.ForeignKey('AddressCity',on_delete = models.SET_NULL, null = True)
     address_detail = models.CharField(max_length = 1000)
     email          = models.EmailField(max_length = 200)
-    gender         = models.OneToOneField('Gender', on_delete = models.SET_NULL, null = True)
+    gender         = models.ForeignKey('Gender',on_delete = models.SET_NULL, null = True)
 
     class Meta:
         db_table = 'users'
@@ -18,7 +18,7 @@ class AddressCity(models.Model):
     city  = models.CharField(max_length = 50)
 
     class Meta:
-        db_table = 'address_citise'
+        db_table = 'address_cities'
 
 class Gender(models.Model):
     name = models.CharField(max_length = 50)
