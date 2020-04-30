@@ -57,6 +57,34 @@ with open(CSV_PATH, newline='') as csvfile:
             city = row['city']
         )
 
+# drive_contact_channel
+CSV_PATH = './CSV/drive_contact.csv'
+
+with open(CSV_PATH, newline='') as csvfile:
+    data_reader = csv.DictReader(csvfile)
+
+    for row in data_reader:
+        DriveContactChannel.objects.create(
+            email = row['email'],
+            fax   = row['fax'],
+            mail  = row['mail'],
+            sms   = row['sms'],
+            call  = row['call'],
+            sns   = row['sns']
+        )
+
+# expectdate
+CSV_PATH = './CSV/ExpectDate.csv'
+
+with open(CSV_PATH, newline='') as csvfile:
+    data_reader = csv.DictReader(csvfile)
+
+    for row in data_reader:
+        ExpectDate.objects.create(
+            period= row['period']
+        )
+
+
 # user
 CSV_PATH = './CSV/user.csv'
 
@@ -68,9 +96,39 @@ with open(CSV_PATH, newline='') as csvfile:
             first_name = row['first_name'],
             last_name = row['last_name'],
             birthday = row['birthday'],
-            phonenumber = row['phone_number'],
+            phone_number = row['phone_number'],
             address_city = AddressCity.objects.get(id=row['address_city_id']),
             address_detail = row['address_detail'],
             email = row['email'],
-            gender = Gender.objects.get(id=row['gender_id'])
+            gender = Gender.objects.get(id=row['gender_id']),
+            drive_contact_channel = DriveContactChannel.objects.get(id=row['drive_contact_channel']),
+            privacy_check = row['privacy_check']
         )
+
+# test_drive_schedule_
+CSV_PATH = './CSV/test_driver_schedule.csv'
+
+with open(CSV_PATH, newline='') as csvfile:
+    data_reader = csv.DictReader(csvfile)
+
+    for row in data_reader:
+        TestDriveSchedule.objects.create(
+            model_version_line = ModelVersionLine.objects.get(id = row['mvl']),
+            store_information = StoreInformation.objects.get(id =row['store']),
+            expect_date = ExpectDate.objects.get(id = row['expect']),
+            contact_us = row['contact'] 
+        )
+
+# test_drive
+CSV_PATH = './CSV/test_drive.csv'
+   
+with open(CSV_PATH, newline='') as csvfile:
+    data_reader = csv.DictReader(csvfile)
+
+    for row in data_reader:
+        TestDrive.objects.create(
+            test_drive_schedule = TestDriveSchedule.objects.get(id = row['schedule']),
+            user = User.objects.get(id = row['user']),
+            current_car_model = row['current_car']
+        )
+
