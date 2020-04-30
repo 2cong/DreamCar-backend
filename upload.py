@@ -246,6 +246,7 @@ with open(CSV_PATH, newline='') as csvfile:
             carpet = Carpet.objects.get(id=row['carpet_id']),
             steering = Steering.objects.get(id=row['steering_id'])
         )
+
 ## package
 CSV_PATH = './CSV/package.csv'
 
@@ -388,7 +389,7 @@ with open(CSV_PATH, newline='') as csvfile:
             dashboard_type      = DashboardType.objects.get(id=row['dashboard_type_id']),
             carpet_type         = CarpetType.objects.get(id=row['carpet_type_id']),
             steering_type       = SteeringType.objects.get(id=row['steering_type_id'])
-       )
+        )
 
 # mvl_package
 CSV_PATH = './CSV/model_version_line_packages.csv'
