@@ -12,7 +12,10 @@ from .views         import ( DefaultView,
                              PackageView,
                              AccessoryView,
                              SummaryView,
-                             CustomCarOptionView
+                             CustomCarOptionView,
+                             LoadView,
+                             CustomCarView,
+                             ContactChannelView
                              )
 
 urlpatterns = [
@@ -29,4 +32,8 @@ urlpatterns = [
         path('/accessory', AccessoryView.as_view()),
         path('/summary', SummaryView.as_view()),
         path('/customcaroption',CustomCarOptionView.as_view()),
+        path('/load',LoadView.as_view()),
+        path('/save',CustomCarView.as_view()),
+        path('/contactchannel',ContactChannelView.as_view())
        ]
+

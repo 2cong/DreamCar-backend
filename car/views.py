@@ -1,4 +1,5 @@
 import json
+import uuid
 
 from django.http             import HttpResponse, JsonResponse
 from django.views            import View
@@ -38,6 +39,8 @@ class DefaultView(View):
 class MainView(View):
     def get(self, request):
         try:
+            data = json.loads(request.body)
+
             mvl       = ModelVersionLine.objects.get(id = request.GET.get('mvl')).code
             exterior  = ExteriorGroup.objects.select_related('exterior', 'wheel', 'caliper').get(exterior = request.GET.get('exterior'), wheel = request.GET.get('wheel'), caliper = request.GET.get('caliper'))
             interior  = InteriorGroup.objects.select_related('seat', 'dashboard', 'carpet', 'steering').get(seat = request.GET.get('seat'), dashboard = request.GET.get('dashboard'), carpet = request.GET.get('carpet'), steering = request.GET.get('steering'))
@@ -48,10 +51,9 @@ class MainView(View):
             one_dict['steering_code'] = interior.steering.code; one_dict['seat_code1'] = interior.seat.code1; one_dict['seat_code2'] = interior.seat.code2
 
             image_url = lambda img_name: ImageUrl.objects.get(name = img_name).image_url
-            
+
             exterior_url = [
-             {
-                 'Exterior1'  : image_url("main_exterior1").format(**image_format('exterior', one_dict)),
+             {   'Exterior1'  : image_url("main_exterior1").format(**image_format('exterior', one_dict)),
                  'Exterior2'  : image_url("main_exterior2").format(**image_format('exterior', one_dict)),
                  'Exterior3'  : image_url("main_exterior3").format(**image_format('exterior',one_dict)),
                  'Exterior4'  : image_url("main_exterior4").format(**image_format('exterior',one_dict)),
@@ -60,7 +62,7 @@ class MainView(View):
                  'Interior3'  : image_url("main_interior3").format(**image_format('interior3',one_dict)),
                  'Interior4'  : image_url("main_interior4").format(**image_format('interior4',one_dict)),
                  'preview'    : image_url("main_preview_url").format(**image_format('exterior',one_dict))
-              }  
+              }
           ]
             return JsonResponse({'rendering_url': exterior_url}, status = 200)
 
@@ -90,7 +92,7 @@ class SummaryView(View):
                 'Exterior1' : image_url("summary_exterior1").format(**image_format('exterior', one_dict)),
                 'Exterior2' : image_url("summary_exterior2").format(**image_format('exterior', one_dict)),
                 'Interior1' : image_url("summary_interior1").format(**image_format('interior2', one_dict)),
-                'preview'   : image_url("summary_perview").format(**image_format('exterior', one_dict)), 
+                'preview'   : image_url("summary_perview").format(**image_format('exterior', one_dict)),
                 'spec' : spec,
                 'dimension' : dimension
               }
@@ -107,7 +109,7 @@ class SummaryView(View):
 class ExteriorView(View):
      def get(self, request, mvl_id):
          exteriors      = ColorType.objects.prefetch_related('exteriortype_set')
-         
+
          exterior_list = [
              {
                color_type.name : [
@@ -125,14 +127,14 @@ class ExteriorView(View):
 class WheelView(View):
      def get(self, request, mvl_id):
         wheel    = Wheel.objects.select_related('wheel_type').filter(model_version_line = mvl_id)
-       
+
         wheel_list = [
              {
                  'wheel_id'      : thumb.id,
                  'wheel_type'    : thumb.wheel_type.name,
                  'thumbnail_url' : thumb.wheel_type.thumbnail_url
              } for thumb in wheel
-        ] 
+        ]
 
         return JsonResponse({'wheel thumbnail' : wheel_list}, status = 200)
 
@@ -223,7 +225,7 @@ class AccessoryView(View):
         category   = AccessoryCategory.objects.prefetch_related('accessory_set')
 
         accessory_list = [
-            { 
+            {
                acc.category : list(acc.accessory_set.values('id', 'name', 'thumbnail_url'))
             } for acc in category
         ]
@@ -268,3 +270,122 @@ class CustomCarOptionView(View):
                 )
 
         return HttpResponse(status=200)
+
+class ContactChannelView(View):
+    def get(self,request):
+
+        contact_list = [
+            {"id" : 1,  "name" : "mail"},
+            {"id" : 2,  "name" : "call"},
+            {"id" : 3,  "name" : "sns"},
+            {"id" : 4,  "name" : "sms"},
+            {"id" : 5,  "name" : "fax"},
+            {"id" : 6,  "name" : "email"}
+        ]
+
+        return JsonResponse({"data":contact_list},status=200)
+
+class CustomCarView(View):
+    @transaction.atomic
+    def post(self,request):
+        data = json.loads(request.body)
+        contact_channel = data['contact_channel']
+        try:
+            for contact in contact_channel :
+                ContactChannel.objects.create(
+                    mail = contact['mail'],
+                    call = contact['call'],
+                    sns = contact['sns'],
+                    sms = contact['sms'],
+                    fax = contact['fax'],
+                    email = contact['email']
+            )
+
+            code_id = str(CustomCar.objects.count())[-1]
+            CustomCar.objects.create(
+                email = data['name'],
+                name = data['name'],
+                code = (str(uuid.uuid4())[0:5]+str(uuid.uuid4)[1:3]+code_id).upper(),
+                contact_channel = ContactChannel.objects.last(),
+                privacy_check = data['privacy_check'],
+                custom_car_option = CustomCarOption.objects.last()
+            )
+        except KeyError:
+            return HttpResponse(statu=400)
+
+        return JsonResponse({"code":CustomCar.objects.last().code},status=200)
+
+class LoadView(View):
+    def get(self,request):
+        code = request.GET.get('code')
+
+        try :
+            if CustomCar.objects.filter(code=code).exists():
+                summary = CustomCar.objects.select_related('custom_car_option','custom_car_option__exterior_group','custom_car_option__interior_group','custom_car_option__model_version_line').get(code=code)
+
+                mvl       = summary.custom_car_option.model_version_line
+                exterior  = summary.custom_car_option.exterior_group
+                interior  = summary.custom_car_option.interior_group
+                spec      = Spec.objects.prefetch_related('modelversionline_set').filter(modelversionline__id = mvl.id).values().first()
+                dimension = Dimension.objects.prefetch_related('modelversionline_set').filter(modelversionline__id = mvl.id).values().first()
+
+                exterior1 = ImageUrl.objects.get(id = 10).image_url
+                exterior2 = ImageUrl.objects.get(id = 11).image_url
+                interior1 = ImageUrl.objects.get(id = 12).image_url
+                preview   = ImageUrl.objects.get(id = 13).image_url
+
+                summary_list = [
+                                 {
+                     "Exterior1"  : exterior1.format(
+                                                     mvl            = mvl.code,
+                                                     caliper_code   = exterior.caliper.code,
+                                                     wheel_code     = exterior.wheel.code,
+                                                     exterior_code  = exterior.exterior.code
+                                                     ),
+
+                     "Exterior2"  : exterior2.format(
+                                                     mvl           = mvl.code,
+                                                     caliper_code  = exterior.caliper.code,
+                                                     wheel_code    = exterior.wheel.code,
+                                                     exterior_code = exterior.exterior.code
+                                                     ),
+
+                     "interior1"  : interior1.format(
+                                                     mvl             = mvl.code,
+                                                     seat_code2      = interior.seat.code2,
+                                                     seat_code1      = interior.seat.code1,
+                                                     dashboard_code1 = interior.dashboard.code1,
+                                                     dashboard_code2 = interior.dashboard.code2,
+                                                     steering_code   = interior.steering.code
+                                                     ),
+                     "preview_url": preview.format(
+                                                     mvl            = mvl.code,
+                                                     caliper_code   = exterior.caliper.code,
+                                                     wheel_code     = exterior.wheel.code,
+                                                     exterior_code  = exterior.exterior.code
+                                                     ),
+                    "model_version_line" : mvl.id,
+
+                    "exterior"    : {
+                          "exterior" : exterior.exterior.exterior_type.color.name,
+                          "wheel"    : exterior.wheel.wheel_type.name,
+                          "caliper"  : exterior.caliper.caliper_type.color.name
+                          },
+
+                    "interior" : {
+                          "seat"      : interior.seat.seat_type.color.name,
+                          "dashboard" : interior.dashboard.dashboard_type.color.name,
+                          "carpet"    : interior.carpet.carpet_type.color.name,
+                          "steering"  : interior.steering.steering_type.color.name
+                           },
+
+                    "spec" : spec,
+                    "dimension" : dimension
+                          }
+                 ]
+                return JsonResponse({"summary" : summary_list}, status = 200)
+
+            else:
+                return JsonResponse({"message":"INVALID_CODE"}, status = 401)
+        except KeyError:
+            return HttpResponse(status = 400)
