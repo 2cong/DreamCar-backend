@@ -73,6 +73,7 @@ class UserView(View):
         cities             = AddressCity.objects.all()
         exhibition_centers = list(StoreInformation.objects.filter(exhibition_center = True))
 
+
         cities_list = [
                 {
                   'city_id'   : city.id,
@@ -80,11 +81,24 @@ class UserView(View):
 		} for city in cities
          ]
          
-        exhibition_list =[
+        exhibition_list = [
                 {
                   'exhibition_id'   : exhibition.id,
                   'exhibition_name' : exhibition.city + f" ({exhibition.name})",
                 } for exhibition in exhibition_centers
               ]
 
-        return JsonResponse({'city': cities_list, 'exhibition' : exhibition_list }, status = 200)
+        gender_list = [
+                        {
+                          'gender_id'   : gender['id'],
+                          'gender_type' : gender['name']
+                        } for gender in Gender.objects.values()
+                      ]
+
+        expect_day = [
+                       {
+                         'expect_day_id' : expect['id'],
+                         'expect_day'    : expect['period']
+                       } for expect in ExpectDate.objects.values()
+                     ]
+        return JsonResponse({'city': cities_list, 'exhibition' : exhibition_list, 'gender' : gender_list, 'expect_day' : expect_day}, status = 200)
