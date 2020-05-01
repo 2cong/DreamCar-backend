@@ -51,7 +51,7 @@ class MainView(View):
             one_dict['steering_code'] = interior.steering.code; one_dict['seat_code1'] = interior.seat.code1; one_dict['seat_code2'] = interior.seat.code2
 
             image_url = lambda img_name: ImageUrl.objects.get(name = img_name).image_url
-            
+
             exterior_url = [
              {   'Exterior1'  : image_url("main_exterior1").format(**image_format('exterior', one_dict)),
                  'Exterior2'  : image_url("main_exterior2").format(**image_format('exterior', one_dict)),
@@ -62,7 +62,7 @@ class MainView(View):
                  'Interior3'  : image_url("main_interior3").format(**image_format('interior3',one_dict)),
                  'Interior4'  : image_url("main_interior4").format(**image_format('interior4',one_dict)),
                  'preview'    : image_url("main_preview_url").format(**image_format('exterior',one_dict))
-              }  
+              }
           ]
             return JsonResponse({'rendering_url': exterior_url}, status = 200)
 
@@ -92,7 +92,7 @@ class SummaryView(View):
                 'Exterior1' : image_url("summary_exterior1").format(**image_format('exterior', one_dict)),
                 'Exterior2' : image_url("summary_exterior2").format(**image_format('exterior', one_dict)),
                 'Interior1' : image_url("summary_interior1").format(**image_format('interior2', one_dict)),
-                'preview'   : image_url("summary_perview").format(**image_format('exterior', one_dict)), 
+                'preview'   : image_url("summary_perview").format(**image_format('exterior', one_dict)),
                 'spec' : spec,
                 'dimension' : dimension
               }
