@@ -39,8 +39,6 @@ class DefaultView(View):
 class MainView(View):
     def get(self, request):
         try:
-            data = json.loads(request.body)
-
             mvl       = ModelVersionLine.objects.get(id = request.GET.get('mvl')).code
             exterior  = ExteriorGroup.objects.select_related('exterior', 'wheel', 'caliper').get(exterior = request.GET.get('exterior'), wheel = request.GET.get('wheel'), caliper = request.GET.get('caliper'))
             interior  = InteriorGroup.objects.select_related('seat', 'dashboard', 'carpet', 'steering').get(seat = request.GET.get('seat'), dashboard = request.GET.get('dashboard'), carpet = request.GET.get('carpet'), steering = request.GET.get('steering'))
