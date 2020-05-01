@@ -1,9 +1,9 @@
 # Maserati Clone Project
 
 ## Introduction
-<a herf='https://www.maserati.com/kr/ko'>Maserati web</a> site clone.
-Develop Member (3 Front-End , 2 Back-End) 
-develop period : '20.04.20. ~ '20.05.01.
+- <a herf='https://www.maserati.com/kr/ko'>Maserati web</a> site clone.
+- Develop Member (3 Front-End , 2 Back-End) 
+- develop period : '20.04.20. ~ '20.05.01.
 
 ## DataBase Modeling
 <a herf="https://aquerytool.com:443/aquerymain/index/?rurl=0d127070-399a-4364-960e-ca9891bd0e8a&">![DB](https://user-images.githubusercontent.com/29778054/80758924-675dfe80-8b71-11ea-87e5-7bbd096a5cf0.PNG)</a>
