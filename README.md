@@ -20,17 +20,17 @@ Aquery read-only key: 872zs0
 - CORS headers
 
 ## API
-[GET] Car image code Combine API
-[GET] Exterior information API
-[GET] Wheel information API
-[GET] Caliper information API
-[GET] Seat information API
-[GET] Dashboard information API
-[GET] Steering information API
-[GET] Carpet information API
-[GET] Page information API
-[GET] Summary provide API
-[GET] Car deafault color API
-[POST] CustomCar data save API
-[POST] Test drive application save API
-[POST] CustomCar data save and provide token API
+- [GET] Car image code Combine API
+- [GET] Exterior information API
+- [GET] Wheel information API
+- [GET] Caliper information API
+- [GET] Seat information API
+- [GET] Dashboard information API
+- [GET] Steering information API
+- [GET] Carpet information API
+- [GET] Page information API
+- [GET] Summary provide API
+- [GET] Car deafault color API
+- [POST] CustomCar data save API
+- [POST] Test drive application save API
+- [POST] CustomCar data save and provide token API
