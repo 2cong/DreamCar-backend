@@ -3,7 +3,7 @@ import json
 from django.http            import HttpResponse,JsonResponse
 from django.views           import View
 from django.core.exceptions import ObjectDoesNotExist
-from django.db              import transaction, IntegrityError
+from django.db              import transaction
 
 from car.models         import ModelVersionLine
 from .models            import  ( User, 
