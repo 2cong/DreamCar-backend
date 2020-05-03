@@ -12,10 +12,9 @@ from .views         import ( DefaultView,
                              PackageView,
                              AccessoryView,
                              SummaryView,
-                             CustomCarOptionView,
                              LoadView,
                              CustomCarView,
-                             ContactChannelView
+                             ContactChannelView,
                              )
 
 urlpatterns = [
@@ -31,9 +30,8 @@ urlpatterns = [
         path('/package/<int:mvl_id>',PackageView.as_view()),
         path('/accessory', AccessoryView.as_view()),
         path('/summary', SummaryView.as_view()),
-        path('/customcaroption',CustomCarOptionView.as_view()),
         path('/load',LoadView.as_view()),
         path('/save',CustomCarView.as_view()),
-        path('/contactchannel',ContactChannelView.as_view())
-       ]
+        path('/contactchannel',ContactChannelView.as_view()),
+    ]
 

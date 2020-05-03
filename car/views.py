@@ -232,45 +232,6 @@ class AccessoryView(View):
 
         return JsonResponse({'accessory' : accessory_list}, status = 200)
 
-class CustomCarOptionView(View):
-    @transaction.atomic
-    def post(self,request):
-        data                = json.loads(request.body)
-
-        model_version_line  = data['mvl']
-        exterior            = data['exterior']
-        wheel               = data['wheel']
-        caliper             = data['caliper']
-        seat                = data['seat']
-        dashboard           = data['dashboard']
-        carpet              = data['carpet']
-        steering            = data['steering']
-        package_list        = data.get('package',None)
-        accessory_list      = data.get('accessory',None)
-
-        CustomCarOption.objects.create(
-                model_version_line   = ModelVersionLine.objects.get(id=model_version_line),
-                exterior_group       = ExteriorGroup.objects.get(exterior_id=exterior,wheel_id=wheel,caliper_id=caliper),
-                interior_group       = InteriorGroup.objects.get(seat_id=seat,dashboard_id=dashboard,carpet_id=carpet,steering_id=steering)
-            )
-
-        if package_list:
-            for packages in package_list:
-                PackageCustomCar.objects.create(
-                    package           = Package.objects.get(id=packages),
-                    custom_car_option = CustomCarOption.objects.last()
-                )
-
-        if accessory_list:
-            for accessories in accessory_list:
-                CustomCarAccessory.objects.create(
-                    quantity          = accessories.get('quantity'),
-                    accessory         = Accessory.objects.get(id=accessories.get('id')),
-                   custom_car_option = CustomCarOption.objects.last()
-                )
-
-        return HttpResponse(status=200)
-
 class ContactChannelView(View):
     def get(self,request):
 
@@ -288,9 +249,39 @@ class ContactChannelView(View):
 class CustomCarView(View):
     @transaction.atomic
     def post(self,request):
-        data = json.loads(request.body)
-        contact_channel = data['contact_channel']
+        data                = json.loads(request.body)
+        contact_channel     = data['contact_channel']
+        model_version_line  = data['mvl']
+        exterior            = data['exterior']
+        wheel               = data['wheel']
+        caliper             = data['caliper']
+        seat                = data['seat']
+        dashboard           = data['dashboard']
+        carpet              = data['carpet']
+        steering            = data['steering']
+        package_list        = data.get('package',None)
+        accessory_list      = data.get('accessory',None)
+
         try:
+            CustomCarOption.objects.create(
+                    model_version_line   = ModelVersionLine.objects.get(id=model_version_line),
+                    exterior_group       = ExteriorGroup.objects.get(exterior_id=exterior,wheel_id=wheel,caliper_id=caliper),
+                    interior_group       = InteriorGroup.objects.get(seat_id=seat,dashboard_id=dashboard,carpet_id=carpet,steering_id=steering)
+                 )
+            if package_list:
+                for packages in package_list:
+                    PackageCustomCar.objects.create(
+                        package           = Package.objects.get(id=packages),
+                        custom_car_option = CustomCarOption.objects.last()
+                    )
+            if accessory_list:
+                for accessories in accessory_list:
+                    CustomCarAccessory.objects.create(
+                        quantity          = accessories.get('quantity'),
+                        accessory         = Accessory.objects.get(id=accessories.get('id')),
+                    custom_car_option = CustomCarOption.objects.last()
+                 )
+
             for contact in contact_channel :
                 ContactChannel.objects.create(
                     mail = contact['mail'],

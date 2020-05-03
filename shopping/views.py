@@ -6,7 +6,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.db              import transaction
 
 from car.models         import ModelVersionLine
-from .models            import  ( User, 
+from .models            import  ( User,
                                   DriveContactChannel,
                                   AddressCity,
                                   Gender,
@@ -55,7 +55,7 @@ class UserView(View):
                 test_drive_schedule   = TestDriveSchedule.objects.last(),
                 user                  = User.objects.last(),
                 current_car_model     = data['current_car'],
-            ) 
+            )
 
             return HttpResponse(status = 200)
 
@@ -78,7 +78,7 @@ class UserView(View):
                   'city_name' : city.city
 		} for city in cities
          ]
-         
+
         exhibition_list =[
                 {
                   'exhibition_id'   : exhibition.id,
