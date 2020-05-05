@@ -150,3 +150,8 @@ CORS_ALLOW_HEADERS = (
     'x-csrftoken',
     'x-requested-with',
 )
+
+ATOMIC_REQUESTS = True
+
+AUTOCOMMIT=False
+

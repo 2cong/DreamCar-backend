@@ -21,7 +21,6 @@ CSV_PATH = './CSV/model.csv'
 
 with open(CSV_PATH, newline='') as csvfile:
     data_reader = csv.DictReader(csvfile)
-
     for row in data_reader:
         Model.objects.create(
             name = row['model']
@@ -32,7 +31,6 @@ CSV_PATH = './CSV/version.csv'
 
 with open(CSV_PATH, newline='') as csvfile:
     data_reader = csv.DictReader(csvfile)
-
     for row in data_reader:
         Version.objects.create(
              name = row['version']
@@ -43,7 +41,6 @@ CSV_PATH = './CSV/line.csv'
 
 with open(CSV_PATH, newline='') as csvfile:
     data_reader = csv.DictReader(csvfile)
-
     for row in data_reader:
         Line.objects.create(
             name = row['line']
@@ -54,7 +51,6 @@ CSV_PATH = './CSV/spec.csv'
 
 with open(CSV_PATH, newline='') as csvfile:
     data_reader = csv.DictReader(csvfile)
-
     for row in data_reader:
         Spec.objects.create(
             acceleration = row['acceleration'],
@@ -72,7 +68,6 @@ CSV_PATH = './CSV/dimension.csv'
 
 with open(CSV_PATH, newline='') as csvfile:
     data_reader = csv.DictReader(csvfile)
-
     for row in data_reader:
         Dimension.objects.create(
             length = row['length'],
@@ -98,7 +93,6 @@ CSV_PATH = './CSV/modelversionline.csv'
 
 with open(CSV_PATH, newline='') as csvfile:
     data_reader = csv.DictReader(csvfile)
-
     for row in data_reader:
         ModelVersionLine.objects.create(
             model = Model.objects.get(id=row['model_id']),
@@ -114,7 +108,6 @@ CSV_PATH = './CSV/color.csv'
 
 with open(CSV_PATH, newline='') as csvfile:
     data_reader = csv.DictReader(csvfile)
-
     for row in data_reader:
         Color.objects.create(
             name = row['color_name']
@@ -125,7 +118,6 @@ CSV_PATH = './CSV/color_type.csv'
 
 with open(CSV_PATH, newline='') as csvfile:
     data_reader = csv.DictReader(csvfile)
-
     for row in data_reader:
         ColorType.objects.create(
             name = row['type']
@@ -136,7 +128,6 @@ CSV_PATH = './CSV/seat_type.csv'
 
 with open(CSV_PATH, newline='') as csvfile:
     data_reader = csv.DictReader(csvfile)
-
     for row in data_reader:
         SeatType.objects.create(
             color = Color.objects.get(id=row['color_id']),
@@ -148,7 +139,6 @@ CSV_PATH = './CSV/seat.csv'
 
 with open(CSV_PATH, newline='') as csvfile:
     data_reader = csv.DictReader(csvfile)
-
     for row in data_reader:
         Seat.objects.create(
             model_version_line = ModelVersionLine.objects.get(id=row['model_version_line_id']),
@@ -162,7 +152,6 @@ CSV_PATH = './CSV/dashboard_type.csv'
 
 with open(CSV_PATH, newline='') as csvfile:
     data_reader = csv.DictReader(csvfile)
-
     for row in data_reader:
         DashboardType.objects.create(
             color = Color.objects.get(id=row['color_id']),
@@ -174,7 +163,6 @@ CSV_PATH = './CSV/dashboard.csv'
 
 with open(CSV_PATH, newline='') as csvfile:
     data_reader = csv.DictReader(csvfile)
-
     for row in data_reader:
         Dashboard.objects.create(
             seat = Seat.objects.get(id=row['seat_id']),
@@ -188,7 +176,6 @@ CSV_PATH = './CSV/carpet_type.csv'
 
 with open(CSV_PATH, newline='') as csvfile:
     data_reader = csv.DictReader(csvfile)
-
     for row in data_reader:
         CarpetType.objects.create(
             color = Color.objects.get(id=row['color_id']),
@@ -200,7 +187,6 @@ CSV_PATH = './CSV/carpet.csv'
 
 with open(CSV_PATH, newline='') as csvfile:
     data_reader = csv.DictReader(csvfile)
-
     for row in data_reader:
         Carpet.objects.create(
             dashboard = Dashboard.objects.get(id=row['dashboard_id']),
@@ -213,7 +199,6 @@ CSV_PATH = './CSV/steering_type.csv'
 
 with open(CSV_PATH, newline='') as csvfile:
     data_reader = csv.DictReader(csvfile)
-
     for row in data_reader:
         SteeringType.objects.create(
             color = Color.objects.get(id=row['color_id']),
@@ -225,7 +210,6 @@ CSV_PATH = './CSV/steering.csv'
 
 with open(CSV_PATH, newline='') as csvfile:
     data_reader = csv.DictReader(csvfile)
-
     for row in data_reader:
         Steering.objects.create(
             dashboard = Dashboard.objects.get(id=row['dashboard_id']),
@@ -238,7 +222,6 @@ CSV_PATH = './CSV/interior_group.csv'
 
 with open(CSV_PATH, newline='') as csvfile:
     data_reader = csv.DictReader(csvfile)
-
     for row in data_reader:
         InteriorGroup.objects.create(
             seat = Seat.objects.get(id=row['seat_id']),
@@ -265,7 +248,6 @@ CSV_PATH = './CSV/exterior_type.csv'
 
 with open(CSV_PATH, newline='') as csvfile:
     data_reader = csv.DictReader(csvfile)
-
     for row in data_reader:
         ExteriorType.objects.create(
             color         = Color.objects.get(id = row['color_id']),
@@ -278,7 +260,6 @@ CSV_PATH = './CSV/exterior.csv'
 
 with open(CSV_PATH, newline='') as csvfile:
     data_reader = csv.DictReader(csvfile)
-
     for row in data_reader:
         Exterior.objects.create(
             model_version_line  = ModelVersionLine.objects.get(id = row['model_version_line_id']),
@@ -291,7 +272,6 @@ CSV_PATH = './CSV/wheel_type.csv'
 
 with open(CSV_PATH, newline='') as csvfile:
     data_reader = csv.DictReader(csvfile)
-
     for row in data_reader:
         WheelType.objects.create(
             name           = row['wheel_name'],
@@ -303,7 +283,6 @@ CSV_PATH = './CSV/wheel.csv'
 
 with open(CSV_PATH, newline='') as csvfile:
     data_reader = csv.DictReader(csvfile)
-
     for row in data_reader:
         Wheel.objects.create(
             model_version_line      = ModelVersionLine.objects.get(id = row['model_version_line_id']),
@@ -316,7 +295,6 @@ CSV_PATH = './CSV/caliper_type.csv'
 
 with open(CSV_PATH, newline='') as csvfile:
     data_reader = csv.DictReader(csvfile) #dictreader , reaader
-
     for row in data_reader:
         CaliperType.objects.create(
              color           = Color.objects.get(id = row['color_id']),
@@ -328,7 +306,6 @@ CSV_PATH = './CSV/caliper.csv'
 
 with open(CSV_PATH, newline='') as csvfile:
     data_reader = csv.DictReader(csvfile) #dictreader , reaader
-
     for row in data_reader:
         Caliper.objects.create(
              model_version_line  = ModelVersionLine.objects.get(id = row['model_version_line_id']),
@@ -341,7 +318,6 @@ CSV_PATH = './CSV/exterior_group.csv'
 
 with open(CSV_PATH, newline='') as csvfile:
     data_reader = csv.DictReader(csvfile) #dictreader , reaader
-
     for row in data_reader:
         ExteriorGroup.objects.create(
              exterior         = Exterior.objects.get(id = row['exterior_id']),
@@ -354,7 +330,6 @@ CSV_PATH = './CSV/accessory_category.csv'
 
 with open(CSV_PATH, newline='') as csvfile:
     data_reader = csv.DictReader(csvfile)
-
     for row in data_reader:
         AccessoryCategory.objects.create(
             category = row['category']
@@ -365,7 +340,6 @@ CSV_PATH = './CSV/accessory.csv'
 
 with open(CSV_PATH, newline='') as csvfile:
     data_reader = csv.DictReader(csvfile)
-
     for row in data_reader:
         Accessory.objects.create(
             name = row['name'],
@@ -378,7 +352,6 @@ CSV_PATH = './CSV/default.csv'
 
 with open(CSV_PATH, newline='') as csvfile:
     data_reader = csv.DictReader(csvfile)
-
     for row in data_reader:
         Default.objects.create(
             model_version_line  = ModelVersionLine.objects.get(id=row['mvl_id']),
@@ -396,7 +369,6 @@ CSV_PATH = './CSV/model_version_line_packages.csv'
 
 with open(CSV_PATH, newline='')as csvfile:
     data_reader = csv.DictReader(csvfile)
-
     for row in data_reader:
         ModelVersionLinePackage.objects.create(
             model_version_line = ModelVersionLine.objects.get(id=row['model_version_line_id']),
@@ -408,7 +380,6 @@ CSV_PATH = './CSV/image_url.csv'
 
 with open(CSV_PATH, newline='') as csvfile:
     data_reader = csv.DictReader(csvfile)
-
     for row in data_reader:
         ImageUrl.objects.create(
             name       = row['name'],
