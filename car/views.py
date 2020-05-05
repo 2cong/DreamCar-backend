@@ -64,7 +64,7 @@ class MainView(View):
           ]
             return JsonResponse({'rendering_url': exterior_url}, status = 200)
 
-        except KeyErrorr:
+        except KeyError:
             return HttpResponse(status = 400)
         except ObjectDoesNotExist:
             return HttpResponse(status = 400)
@@ -156,6 +156,7 @@ class SeatView(View):
 
         seat_color_list  = [
         {
+            'seat_id'        : color_info.id,
             'color_id'       : color_info.seat_type.color.id,
             'color'          : color_info.seat_type.color.name,
             'thumnbnail_url' : color_info.seat_type.thumbnail_url
@@ -169,7 +170,7 @@ class DashboardView(View):
         dashboard_list=[
             { "seat_id"              : dashboard.seat.id,
               "dashboard_id"         : dashboard.id,
-              "dashboard_color_id"   : dashboard.dashboard_type.color.id,
+              "color_id"             : dashboard.dashboard_type.color.id,
               "dashboard_color_name" : dashboard.dashboard_type.color.name,
               "dashboard_thumbnail"  : dashboard.dashboard_type.thumbnail_url
              } for dashboard in Dashboard.objects.select_related('dashboard_type').filter(seat__model_version_line_id=mvl_id)]
@@ -183,7 +184,7 @@ class CarpetView(View):
             { "seat_id"           : carpet.dashboard.seat.id,
               "dashboard_id"      : carpet.dashboard.id,
               "carpet_id"         : carpet.id,
-              "carpet_color_id"   : carpet.carpet_type.color.id,
+              "color_id"          : carpet.carpet_type.color.id,
               "carpet_color_name" : carpet.carpet_type.color.name,
               "carpet_thumbnail"  : carpet.carpet_type.thumbnail_url
              } for carpet in Carpet.objects.select_related('carpet_type','dashboard','carpet_type__color').filter(dashboard__seat__model_version_line_id=mvl_id)]
@@ -197,7 +198,7 @@ class SteeringView(View):
             { "seat_id"             : steering.dashboard.seat.id,
               "dashboard_id"        : steering.dashboard.id,
               "steering_id"         : steering.id,
-              "steering_color_id"   : steering.steering_type.color.id,
+              "color_id"            : steering.steering_type.color.id,
               "steering_color_name" : steering.steering_type.color.name,
               "steering_thumbnail"  : steering.steering_type.thumbnail_url
              } for steering in Steering.objects.select_related('steering_type','dashboard','steering_type__color').filter(dashboard__seat__model_version_line_id=mvl_id)]
@@ -230,45 +231,6 @@ class AccessoryView(View):
 
         return JsonResponse({'accessory' : accessory_list}, status = 200)
 
-class CustomCarOptionView(View):
-    @transaction.atomic
-    def post(self,request):
-        data                = json.loads(request.body)
-
-        model_version_line  = data['mvl']
-        exterior            = data['exterior']
-        wheel               = data['wheel']
-        caliper             = data['caliper']
-        seat                = data['seat']
-        dashboard           = data['dashboard']
-        carpet              = data['carpet']
-        steering            = data['steering']
-        package_list        = data.get('package',None)
-        accessory_list      = data.get('accessory',None)
-
-        CustomCarOption.objects.create(
-                model_version_line   = ModelVersionLine.objects.get(id=model_version_line),
-                exterior_group       = ExteriorGroup.objects.get(exterior_id=exterior,wheel_id=wheel,caliper_id=caliper),
-                interior_group       = InteriorGroup.objects.get(seat_id=seat,dashboard_id=dashboard,carpet_id=carpet,steering_id=steering)
-            )
-
-        if package_list:
-            for packages in package_list:
-                PackageCustomCar.objects.create(
-                    package           = Package.objects.get(id=packages),
-                    custom_car_option = CustomCarOption.objects.last()
-                )
-
-        if accessory_list:
-            for accessories in accessory_list:
-                CustomCarAccessory.objects.create(
-                    quantity          = accessories.get('quantity'),
-                    accessory         = Accessory.objects.get(id=accessories.get('id')),
-                   custom_car_option = CustomCarOption.objects.last()
-                )
-
-        return HttpResponse(status=200)
-
 class ContactChannelView(View):
     def get(self,request):
 
@@ -286,9 +248,41 @@ class ContactChannelView(View):
 class CustomCarView(View):
     @transaction.atomic
     def post(self,request):
-        data = json.loads(request.body)
-        contact_channel = data['contact_channel']
+        data                = json.loads(request.body)
+        contact_channel     = data['contact_channel']
+        model_version_line  = data['mvl']
+        exterior            = data['exterior']
+        wheel               = data['wheel']
+        caliper             = data['caliper']
+        seat                = data['seat']
+        dashboard           = data['dashboard']
+        carpet              = data['carpet']
+        steering            = data['steering']
+        package_list        = data.get('package',None)
+        accessory_list      = data.get('accessory',None)
+
         try:
+            CustomCarOption.objects.create(
+                    model_version_line   = ModelVersionLine.objects.get(id=model_version_line),
+                    exterior_group       = ExteriorGroup.objects.get(exterior_id=exterior,wheel_id=wheel,caliper_id=caliper),
+                    interior_group       = InteriorGroup.objects.get(seat_id=seat,dashboard_id=dashboard,carpet_id=carpet, steering_id=steering)
+                )
+
+            if package_list:
+                for packages in package_list:
+                     PackageCustomCar.objects.create(
+                         package           = Package.objects.get(id=packages),
+                        custom_car_option = CustomCarOption.objects.last()
+                    )
+
+            if accessory_list:
+                for accessories in accessory_list:
+                    CustomCarAccessory.objects.create(
+                        quantity          = accessories.get('quantity'),
+                        accessory         = Accessory.objects.get(id=accessories.get('id')),
+                        custom_car_option = CustomCarOption.objects.last()
+                   )
+
             for contact in contact_channel :
                 ContactChannel.objects.create(
                     mail = contact['mail'],
@@ -301,7 +295,7 @@ class CustomCarView(View):
 
             code_id = str(CustomCar.objects.count())[-1]
             CustomCar.objects.create(
-                email = data['name'],
+                email = data['email'],
                 name = data['name'],
                 code = (str(uuid.uuid4())[0:5]+str(uuid.uuid4)[1:3]+code_id).upper(),
                 contact_channel = ContactChannel.objects.last(),
@@ -309,7 +303,7 @@ class CustomCarView(View):
                 custom_car_option = CustomCarOption.objects.last()
             )
         except KeyError:
-            return HttpResponse(statu=400)
+            return HttpResponse(status=400)
 
         return JsonResponse({"code":CustomCar.objects.last().code},status=200)
 
