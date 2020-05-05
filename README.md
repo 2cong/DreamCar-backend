@@ -6,7 +6,7 @@
 - develop period : '20.04.20. ~ '20.05.01.
 
 ## Demo
-[https://files.slack.com/files-pri/TH0U6FBTN-F0130UHKY8M/image.png](https://youtu.be/yaO4jlIrlY8)
+![](https://files.slack.com/files-pri/TH0U6FBTN-F0130UHKY8M/image.png)(https://youtu.be/yaO4jlIrlY8)
 
 ## DataBase Modeling
 ![DB](https://user-images.githubusercontent.com/29778054/80758924-675dfe80-8b71-11ea-87e5-7bbd096a5cf0.PNG)
