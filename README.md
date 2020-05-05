@@ -21,7 +21,8 @@
 - CORS headers
 
 ## API
-- [GET] Car image code Combine API
+- [GET] Image Url API
+- [GET] Default color information API
 - [GET] Exterior information API
 - [GET] Wheel information API
 - [GET] Caliper information API
@@ -30,10 +31,9 @@
 - [GET] Steering information API
 - [GET] Carpet information API
 - [GET] Package information API
-- [GET] accessory information API
-- [GET] Summary provide API
-- [GET] Car deafault color API
+- [GET] Accessory information API
+- [GET] Summary API
 - [GET] Load CustomCar data API
 - [GET] Test drive information API
-- [POST] Test drive application save API
-- [POST] CustomCar data save and provide code API
+- [POST] Save Test drive application API
+- [POST] Save car information and Provide code API
