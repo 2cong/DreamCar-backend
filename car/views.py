@@ -297,7 +297,7 @@ class CustomCarView(View):
             CustomCar.objects.create(
                 email = data['email'],
                 name = data['name'],
-                code = (str(uuid.uuid4())[0:5]+str(uuid.uuid4)[1:3]+code_id).upper(),
+                code = (str(uuid.uuid4())[0:5]+str(uuid.uuid4())[1:3]+code_id).upper(),
                 contact_channel = ContactChannel.objects.last(),
                 privacy_check = data['privacy_check'],
                 custom_car_option = CustomCarOption.objects.last()
