@@ -6,7 +6,7 @@
 - develop period : '20.04.20. ~ '20.05.01.
 
 ## Demo
-[<img width="752" alt="스크린샷 2020-07-06 오전 12 54 21" src="https://user-images.githubusercontent.com/60612551/86536549-85eec600-bf23-11ea-98ec-8b4f3e348484.png">
+[<img width="1200" alt="스크린샷 2020-07-06 오전 12 54 21" src="https://user-images.githubusercontent.com/60612551/86536549-85eec600-bf23-11ea-98ec-8b4f3e348484.png">
 ](https://youtu.be/yaO4jlIrlY8)
 
 ## DataBase Modeling
